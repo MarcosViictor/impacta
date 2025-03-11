@@ -1,20 +1,20 @@
-# Use uma imagem base do Python
+# Use a imagem base do Python
 FROM python:3.11-slim
 
-# Defina o diretório de trabalho dentro do container
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copie o arquivo requirements.txt para dentro do container
-COPY requirements.txt /app/
+# Copia os arquivos de requirements para o container
+COPY requirements.txt .
 
-# Instale as dependências
+# Instala as dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copie todos os arquivos do projeto para dentro do container
-COPY . /app/
+# Copia o restante do código para o container
+COPY . .
 
-# Exponha a porta que o Django vai rodar
+# Expõe a porta que o Django vai rodar
 EXPOSE 8000
 
-# Comando para rodar o Django no modo de desenvolvimento
+# Comando para rodar o servidor Django
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
