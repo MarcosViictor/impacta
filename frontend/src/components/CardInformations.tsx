@@ -1,7 +1,11 @@
 import { Button } from './Button'
 import { Phone, Mail, MapPin } from 'lucide-react'
 
-export const CardInformations = () => {
+import { ContactOng } from '@/types/ContactOng'
+
+type CardInformationsProps = ContactOng
+
+export const CardInformations = (props: CardInformationsProps) => {
   return (
     <div className="w-[400px] bg-white rounded-lg p-6 shadow-md">
       <h2 className="text-2xl font-bold mb-6">Informações de Contato</h2>
@@ -10,20 +14,20 @@ export const CardInformations = () => {
       <div className="space-y-4 mb-6">
         <div className="flex items-center gap-3">
           <Phone className="w-5 h-5 text-blue-600" />
-          <span className="text-gray-700">(11) 99999-9999</span>
+          <span className="text-gray-700">{props.phone}</span>
         </div>
 
         <div className="flex items-center gap-3">
           <Mail className="w-5 h-5 text-blue-600" />
-          <span className="text-gray-700">contato@amigosdosanimais.org</span>
+          <span className="text-gray-700">{props.email}</span>
         </div>
 
         <div className="flex items-start gap-3">
           <MapPin className="w-5 h-5 text-blue-600 mt-1" />
           <div className="flex flex-col">
             <span className="font-semibold text-gray-900">Endereço</span>
-            <span className="text-gray-700">Rua dos Animais, 123 - Jardim Esperança</span>
-            <span className="text-gray-700">São Paulo, SP</span>
+            <span className="text-gray-700">{props.address}</span>
+            <span className="text-gray-700">{props.city}, {props.state}</span>
           </div>
         </div>
       </div>

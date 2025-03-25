@@ -1,12 +1,11 @@
 import Logo from '@/static/assets/logo.svg'
-import { theme, colors } from '@/static/styles/theme'
 import { Link } from 'react-router-dom'
 
 export const Header = () => {
   return (
     <header 
-      className='sticky top-0 z-50 shadow-sm'
-      style={{ backgroundColor: colors.beige[300] }}
+      className='sticky top-0 z-50 shadow-sm bg-beige-300'
+
     >
       <div className='max-w-7xl mx-auto flex items-center justify-between px-6 py-4'>
 
@@ -42,11 +41,7 @@ export const Header = () => {
           </Link>
           <Link 
             to='/'
-            className='px-3 py-2 font-semibold text-white transition-all duration-200 hover:shadow-md hover:brightness-110'
-            style={{
-              backgroundColor: colors.blue[600],
-              borderRadius: theme.borderRadius.DEFAULT
-            }}
+            className='px-3 py-2 font-semibold text-white transition-all duration-200 hover:shadow-md hover:brightness-110 bg-blue-600 rounded-md'
           >
             Cadastrar
           </Link>
