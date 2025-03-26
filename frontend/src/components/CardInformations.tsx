@@ -7,7 +7,7 @@ type CardInformationsProps = ContactOng
 
 export const CardInformations = (props: CardInformationsProps) => {
   return (
-    <div className="w-[400px] bg-white rounded-lg p-6 shadow-md">
+    <div className="w-[400px] h-fit bg-white rounded-lg p-6 shadow-md sticky">
       <h2 className="text-2xl font-bold mb-6">Informações de Contato</h2>
 
       {/* Informações principais */}
