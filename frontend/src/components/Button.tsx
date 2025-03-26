@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, ElementType } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'light' | 'dark'
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'light' | 'dark' | 'active'
   size?: 'sm' | 'md' | 'lg'
   width?: 'auto' | 'full'
   className?: string
@@ -39,7 +39,8 @@ export const Button = ({
     danger: 'bg-red-600 text-white border-transparent hover:bg-red-700',
     info: 'bg-blue-400 text-white border-transparent hover:bg-blue-500',
     light: 'bg-gray-100 text-gray-900 border border-gray-300 hover:bg-gray-200',
-    dark: 'bg-gray-900 text-white border-transparent hover:bg-gray-800'
+    dark: 'bg-gray-900 text-white border-transparent hover:bg-gray-800',
+    active: 'bg-gray-100 text-gray-900',
   }
 
   return (
@@ -51,8 +52,7 @@ export const Button = ({
         font-semibold
         rounded-md
         transition-all
-        duration-200
-        hover:shadow-md
+        duration-200 
         flex
         items-center
         justify-center
