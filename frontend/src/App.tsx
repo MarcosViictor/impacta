@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Dashboard } from './pages/Dashboard';
+import { Dashboard } from '@/pages/Dashboard';
+import { OngDetails } from '@/pages/OngDetails';
 
 function App() {
 
@@ -8,6 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Dashboard />} />
+          <Route path='/ong' element={<OngDetails />} />
           
         </Routes>
       </BrowserRouter>
