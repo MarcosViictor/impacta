@@ -2,10 +2,30 @@ import { CardInformations } from "@/components/CardInformations"
 import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
 
+import { Star, MapPin } from 'lucide-react'
+
 export const OngDetails = () => {
     return (
         <>
-            <Header />  
+            <Header /> 
+
+            <section>
+                <h2>Amigos dos anmais</h2>
+                <div>
+                    <span>
+                        <MapPin />
+                        <span>São Paulo, SP</span>
+                    </span>
+                    <span>
+                        <Star />
+                        <span>4.5</span>
+                    </span>
+                </div>
+            
+            
+            
+            
+            </section> 
             <div className="flex">
                 <CardInformations 
                     phone="11 99999-9999"

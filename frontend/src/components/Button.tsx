@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes, ElementType } from 'react'
-import { theme, colors } from '@/static/styles/theme'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'light' | 'dark'
@@ -32,65 +31,28 @@ export const Button = ({
     full: 'w-full'
   }
 
-  const getVariantStyles = (variant: string) => {
-    const styles = {
-      primary: {
-        bg: colors.blue[700],
-        text: '#FFFFFF',
-        border: 'none'
-      },
-      secondary: {
-        bg: colors.gray[600],
-        text: '#FFFFFF',
-        border: 'none'
-      },
-      success: {
-        bg: '#22C55E',
-        text: '#FFFFFF',
-        border: 'none'
-      },
-      warning: {
-        bg: colors.yellow[500],
-        text: '#1F2937',
-        border: 'none'
-      },
-      danger: {
-        bg: colors.red[600],
-        text: '#FFFFFF',
-        border: 'none'
-      },
-      info: {
-        bg: colors.blue[400],
-        text: '#FFFFFF',
-        border: 'none'
-      },
-      light: {
-        bg: colors.gray[100],
-        text: colors.gray[900],
-        border: `1px solid ${colors.gray[300]}`
-      },
-      dark: {
-        bg: colors.gray[900],
-        text: '#FFFFFF',
-        border: 'none'
-      }
-    }
-
-    return styles[variant as keyof typeof styles] || styles.primary
+  const variantStyles = {
+    primary: 'bg-blue-700 text-white border-transparent hover:bg-blue-800',
+    secondary: 'bg-gray-600 text-white border-transparent hover:bg-gray-700',
+    success: 'bg-green-500 text-white border-transparent hover:bg-green-600',
+    warning: 'bg-yellow-500 text-gray-900 border-transparent hover:bg-yellow-600',
+    danger: 'bg-red-600 text-white border-transparent hover:bg-red-700',
+    info: 'bg-blue-400 text-white border-transparent hover:bg-blue-500',
+    light: 'bg-gray-100 text-gray-900 border border-gray-300 hover:bg-gray-200',
+    dark: 'bg-gray-900 text-white border-transparent hover:bg-gray-800'
   }
-
-  const variantStyle = getVariantStyles(variant)
 
   return (
     <Component
       className={`
         ${sizeStyles[size]}
         ${widthStyles[width]}
+        ${variantStyles[variant]}
         font-semibold
+        rounded-md
         transition-all
         duration-200
         hover:shadow-md
-        hover:brightness-110
         flex
         items-center
         justify-center
@@ -98,12 +60,6 @@ export const Button = ({
         ${className}
         cursor-pointer
       `}
-      style={{
-        borderRadius: theme.borderRadius.DEFAULT,
-        backgroundColor: variantStyle.bg,
-        color: variantStyle.text,
-        border: variantStyle.border
-      }}
       {...props}
     >
       {children}
