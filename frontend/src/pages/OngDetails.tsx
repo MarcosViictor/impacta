@@ -1,4 +1,3 @@
-import { Button } from "@/components/Button"
 import { CardInformations } from "@/components/CardInformations"
 import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
@@ -7,6 +6,7 @@ import { Itens } from "@/components/Itens"
 import { useState } from "react"
 
 import { StarIcon, MapPin } from 'lucide-react'
+import { NavigationTab } from "@/components/NavigationTab"
 
 export const OngDetails = () => {
     const [activeTab, setActiveTab] = useState('Sobre')
@@ -103,45 +103,11 @@ export const OngDetails = () => {
                         </span>
                     </div>
 
-                    <div className="flex gap-2 bg-gray-100 rounded-md p-1 justify-around mb-6">
-                        <Button
-                            variant="active"
-                            size="sm"
-                            width="full"
-                            onClick={() => handleTabClick('Sobre')}
-                            className={activeTab === 'Sobre' ? 'bg-white' : ''}
-                        >
-                            <span>Sobre</span>
-                        </Button>
-
-                        <Button
-                            variant="active"
-                            size="sm"
-                            width="full"
-                            onClick={() => handleTabClick('Necessidades')}
-                            className={activeTab === 'Necessidades' ? 'bg-white' : ''}
-                        >
-                            <span>Necessidades</span>
-                        </Button>
-                        <Button
-                            variant="active"
-                            size="sm"
-                            width="full"
-                            onClick={() => handleTabClick('Algo')}
-                            className={activeTab === 'Algo' ? 'bg-white' : ''}
-                        >           
-                            <span>Algo</span>
-                        </Button>
-                        <Button
-                            variant="active"
-                            size="sm"
-                            width="full"
-                            onClick={() => handleTabClick('Galeria')}
-                            className={activeTab === 'Galeria' ? 'bg-white' : ''}
-                        >
-                            <span>Galeria</span>
-                        </Button>
-                    </div>
+                    <NavigationTab
+                        activeTab={activeTab}
+                        handleTabClick={handleTabClick}
+                        content={['Sobre', 'Necessidades', 'Algo', 'Galeria']}
+                    />
 
                     {renderTabContent()}
                 </div>
