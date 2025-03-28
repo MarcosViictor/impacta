@@ -9,7 +9,7 @@ interface NavigationTabProps {
 export const NavigationTab = ({ activeTab, handleTabClick, content }: NavigationTabProps) => {
     return (
         <nav>
-            <div className="flex gap-2 bg-gray-100 rounded-md p-1 justify-around mb-6">
+            <div className="flex gap-2 bg-gray-100 rounded-md p-1 justify-around mb-4">
                 {content.map((tab, index) => (
                     <Button
                         key={index}
