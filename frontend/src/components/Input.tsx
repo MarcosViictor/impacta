@@ -6,11 +6,12 @@ interface InputProps {
     type: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     error?: string;
+    isFlex1?: boolean;
 }       
 
-export const Input = ({ label, placeholder, value, onChange, type, error }: InputProps) => {
+export const Input = ({ label, placeholder, value, onChange, type, error, isFlex1 }: InputProps) => {
     return (
-        <div className="flex flex-col gap-1">
+        <div className={`flex flex-col gap-1 ${isFlex1 ? 'flex-1' : ''}`}>
             <label htmlFor={label} className="text-sm font-medium">{label}</label>
 
             <input
