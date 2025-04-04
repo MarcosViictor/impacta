@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 export const Header = () => {
   return (
     <header 
-      className='sticky top-0 z-50 shadow-lg bg-gray-100 border-b-2 border-white/50 backdrop-blur-sm '
+      className='sticky top-0 z-50 shadow-lg bg-gray border-b-2 border-white/50 backdrop-blur-sm '
 
     >
       <div className='max-w-7xl mx-auto flex items-center justify-between px-6 py-4'>
