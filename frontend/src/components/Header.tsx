@@ -20,13 +20,13 @@ export const Header = () => {
         <nav className='flex items-center gap-8'>
           <Link 
             to='/'
-            className='relative font-medium text-black after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
+            className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
           >
             Buscar ONGs
           </Link>
           <Link 
             to='/'
-            className='relative font-medium text-black after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
+            className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
           >
             Como funciona
           </Link>
@@ -35,7 +35,7 @@ export const Header = () => {
         <div className='flex items-center gap-6'>
           <Link 
             to='/'
-            className='font-medium text-black hover:font-semibold transition-colors '
+            className='font-medium text-black hover:text-blue-700  transition-colors '
           >
             Entrar
           </Link>
