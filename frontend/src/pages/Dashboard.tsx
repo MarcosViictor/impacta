@@ -10,7 +10,7 @@ export const Dashboard = () => {
         {/* pode apagar isso */}
 
         <div className="flex gap-4 w-[500px]">
-          
+           
         </div>
   
       <Footer />
