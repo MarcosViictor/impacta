@@ -1,5 +1,6 @@
 import { MapPin } from "lucide-react"
 import { Button } from "./Button"
+import { Link } from "react-router-dom"
 
 interface OngCardProps {
     name: string
@@ -33,6 +34,8 @@ export const OngCard = ( {name, description, city, state } : OngCardProps) => {
                         <Button
                             variant="light"
                             size="sm"
+                            as={Link}
+                            to="/ong"
                         >
                             Ver detalhes
                         </Button>
