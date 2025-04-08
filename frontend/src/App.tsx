@@ -5,6 +5,7 @@ import { UserProfile } from '@/pages/UserProfile';
 import { CadastroOng } from '@/pages/CadastroOng';
 import { TelaCadastro } from './pages/TelaCadastro';
 import { TelaEntra } from './pages/TelaEntrar';
+import { ProfileEdit } from './pages/ProfileEdit';
 
 function App() {
 
@@ -17,8 +18,10 @@ function App() {
           <Route path='/user' element={<UserProfile />} />
           <Route path='/cadastro-ong' element={<CadastroOng />} />
           <Route path='/cadastro' element={<TelaCadastro />} />
-          <Route path='/entrar' element={<TelaEntra />} />
           
+          
+          <Route path='/entrar' element={<TelaEntra />} />
+          <Route path='/profile' element={<ProfileEdit />} />
         </Routes>
       </BrowserRouter>
     </>
