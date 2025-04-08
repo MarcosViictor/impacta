@@ -6,7 +6,7 @@ from auth_app.views import ProtectedView
 def Olaturma(request):
     return HttpResponse("Olá turma!")
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # path('api/', include('core.urls')),  # Rotas da aplicação principal
-    # path('api/v1/', include('core.urls')),  # Rotas da aplicação principal
+    path('admin/', admin.site.urls),
+    path('api/', include('auth_app.urls')),  # Rotas da aplicação principal
+    path('api/v1/', include('auth_app.urls')),  # Rotas da aplicação principal
 ]
