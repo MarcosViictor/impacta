@@ -1,12 +1,20 @@
-import { theme, colors } from './styles/theme'
-import { Camera, Home, Settings, Bell } from "lucide-react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Dashboard } from '@/pages/Dashboard';
+import { OngDetails } from '@/pages/OngDetails';
+import { UserProfile } from '@/pages/UserProfile';
 
 function App() {
 
   return (
     <>
-      <h1 className="text-3xl " style={{ color: colors.red[200], }}>Boa noite!</h1>
-      <Camera className='w-10 h-10' />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Dashboard />} />
+          <Route path='/ong' element={<OngDetails />} />
+          <Route path='/user' element={<UserProfile />} />
+          
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
