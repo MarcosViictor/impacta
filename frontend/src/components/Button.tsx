@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string
   as?: ElementType
   to?: string
-  onClick?: () => void
+  icon?: React.ReactNode
 }
 
 export const Button = ({
@@ -17,6 +17,7 @@ export const Button = ({
   className = '',
   as: Component = 'button',
   children,
+  icon,
   ...props
 }: ButtonProps) => {
 
@@ -62,7 +63,10 @@ export const Button = ({
       `}
       {...props}
     >
-      {children}
+      <div className="flex items-center justify-between gap-2 w-full">
+        {icon && <span className="w-6 h-6">{icon}</span>}
+        {children}
+      </div> 
     </Component>
   )
 }
