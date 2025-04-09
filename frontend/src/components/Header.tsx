@@ -34,7 +34,7 @@ export const Header = () => {
 
         <div className='flex items-center gap-6'>
           <Link 
-            to='/'
+            to='/login'
             className='font-medium text-black hover:text-blue-700  transition-colors '
           >
             Entrar
