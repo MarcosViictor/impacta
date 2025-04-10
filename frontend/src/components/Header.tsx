@@ -19,7 +19,7 @@ export const Header = () => {
     
         <nav className='flex items-center gap-8'>
           <Link 
-            to='/'
+            to='/search'
             className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
           >
             Buscar ONGs
