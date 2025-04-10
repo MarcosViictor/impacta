@@ -64,7 +64,7 @@ export const Register = () => {
 
             <p className="flex gap-1 text-gray-600 text-[.9rem]">
               Já tem uma conta?
-              <Link to={"/register"}>
+              <Link to={"/login"}>
                 <span className="font-bold underline text-black">
                   Entrar
                 </span>
@@ -80,7 +80,10 @@ export const Register = () => {
               documentos.
             </p>
 
-            <Button>
+            <Button
+                as={Link}
+                to="/register/ong"
+            >
               <span>Iniciar Cadastro de ONG</span>
             </Button>
           </div>

@@ -40,7 +40,7 @@ export const Header = () => {
             Entrar
           </Link>
           <Link 
-            to='/'
+            to='/register'
             className='px-2 py-1 font-semibold text-blue-700 transition-all duration-200 hover:shadow-md hover:bg-blue-700 hover:text-white   hover:brightness-110 bg-white rounded-md border-3 border-blue-700'
           >
             Cadastrar
