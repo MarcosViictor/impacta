@@ -19,7 +19,7 @@ export const Header = () => {
     
         <nav className='flex items-center gap-8'>
           <Link 
-            to='/'
+            to='/search'
             className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
           >
             Buscar ONGs
@@ -34,13 +34,13 @@ export const Header = () => {
 
         <div className='flex items-center gap-6'>
           <Link 
-            to='/'
+            to='/login'
             className='font-medium text-black hover:text-blue-700  transition-colors '
           >
             Entrar
           </Link>
           <Link 
-            to='/'
+            to='/register'
             className='px-2 py-1 font-semibold text-blue-700 transition-all duration-200 hover:shadow-md hover:bg-blue-700 hover:text-white   hover:brightness-110 bg-white rounded-md border-3 border-blue-700'
           >
             Cadastrar
