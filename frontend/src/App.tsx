@@ -4,6 +4,7 @@ import { OngDetails } from '@/pages/OngDetails';
 import { UserProfile } from '@/pages/UserProfile';
 import { SearchPage } from '@/pages/SearchPage';
 import { Login } from '@/pages/Login';
+import { Register } from '@/pages/Register';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path='/user' element={<UserProfile />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           
         </Routes>
       </BrowserRouter>
