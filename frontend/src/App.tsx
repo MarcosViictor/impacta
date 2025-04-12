@@ -7,13 +7,12 @@ import { Login } from '@/pages/Login';
 import { Register } from '@/pages/Register';
 import { RegisterOng } from '@/pages/RegisterOng';
 import { FAQPage } from './pages/FAQ';
-import ShoppingCart from './pages/Cart';
+import { ShoppingCart } from './pages/Cart';
 
 function App() {
-
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
         <Routes>
           <Route path='/' element={<Dashboard />} />
           <Route path='/ong' element={<OngDetails />} />
@@ -24,11 +23,10 @@ function App() {
           <Route path='/register/ong' element={<RegisterOng />} />
           <Route path='/faq' element={<FAQPage />} />
           <Route path='/cart' element={<ShoppingCart />} />
-          
         </Routes>
-      </BrowserRouter>
-    </>
-  )
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
