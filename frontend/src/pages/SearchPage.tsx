@@ -35,7 +35,6 @@ export const SearchPage = () => {
                     <div className="flex gap-4 mb-8">
                         <Input
                             placeholder="Buscar por nome, localização..."
-                            fullWidth={true}
                         />
                         <Button
                             icon={<Search className="w-5 h-5"/>}
