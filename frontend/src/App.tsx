@@ -8,6 +8,7 @@ import { Register } from '@/pages/Register';
 import { RegisterOng } from '@/pages/RegisterOng';
 import { FAQPage } from './pages/FAQ';
 import { ShoppingCart } from './pages/Cart';
+import { UpdateOng } from '@/pages/UpdateOng';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/' element={<Dashboard />} />
           <Route path='/ong' element={<OngDetails />} />
           <Route path='/user' element={<UserProfile />} />
+          <Route path='/ong/update' element={<UpdateOng />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
