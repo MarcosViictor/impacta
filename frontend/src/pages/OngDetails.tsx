@@ -3,7 +3,6 @@ import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
 import { Itens } from "@/components/Itens"
 import Review from '@/pages/Review'
-import { Link } from 'react-router-dom'
 
 import { useState } from "react"
 
@@ -130,13 +129,6 @@ export const OngDetails = () => {
                     />
                 </div>
             </section>
-
-            <Link 
-                to="/review" 
-                className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-                Avaliar ONG
-            </Link>
         </>
     )
 }
