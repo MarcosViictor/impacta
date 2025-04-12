@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { FaStar } from 'react-icons/fa';
+import { useState } from 'react';
+import { Star } from 'lucide-react';
+import { Button } from '@/components/Button';
 
-const Review: React.FC = () => {
+export const Review = () => {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
   const [hover, setHover] = useState<number>(0);
@@ -17,7 +18,7 @@ const Review: React.FC = () => {
       
       <div className="flex gap-2 mb-6">
         {[1, 2, 3, 4, 5].map((star) => (
-          <FaStar
+          < Star 
             key={star}
             className={`w-8 h-8 cursor-pointer transition-colors ${
               hover >= star || rating >= star ? 'text-yellow-400' : 'text-gray-300'
@@ -36,12 +37,14 @@ const Review: React.FC = () => {
         onChange={(e) => setComment(e.target.value)}
       />
 
-      <button
+      <Button
         onClick={handleSubmit}
-        className="w-full py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+        width='full'
       >
         Enviar Avaliação
-      </button>
+      </Button>
+
+    
     </div>
   );
 };

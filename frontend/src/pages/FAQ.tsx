@@ -1,7 +1,6 @@
 import { Header } from "@/components/Header";
 import { useState } from "react";
 import { NavigationTab } from "@/components/NavigationTab";
-import Img from '@/static/assets/IMAGE.png'
 
 const faqs = [
   { question: "Como doar?", answer: "Você pode doar através do nosso site..." },
@@ -44,7 +43,6 @@ export const FAQPage = () => {
                     <p className="text-[24px]">
                         Tem dúvidas? Estamos aqui para ajudar! Confira abaixo as respostas para as perguntas mais comuns. Caso não encontre o que procura, entre em contato conosco.          </p>
                 </div>
-                <img src={Img} alt="" />
             </div>
           
           <div className="mt-6 flex flex-wrap justify-between gap-[24px]">
