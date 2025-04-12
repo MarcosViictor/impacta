@@ -3,6 +3,9 @@ import { Input } from "@/components/Input";
 import { NavigationTab } from "@/components/NavigationTab";
 import { useState } from "react";
 
+import { StarIcon, MapPin } from 'lucide-react'
+import FAQ from "@/components/FAQ";
+
 export const UpdateOng = () => {
   const [name, setName] = useState("");
   const [shortDescription, setShortDescription] = useState("");
@@ -177,6 +180,13 @@ export const UpdateOng = () => {
             </div>
           </div>
         );
+        case "FAQ":
+          return (
+            <div className="flex flex-col gap-4">
+                <FAQ />
+            </div>
+          );
+        
     }
   };
 
@@ -191,14 +201,26 @@ export const UpdateOng = () => {
       </div>
 
       <section className="container px-14 flex flex-col gap-8 justify-center items-center mb-8 w-full">
-        <div className="w-full">
+        <div className="w-[80%]">
+        <h2 className="text-2xl font-bold mb-2">Alimentação</h2>
+        <div className="mb-6 flex gap-4 items-center text-gray-500 text-sm">
+                        <span className="flex items-center gap-1">
+                            <MapPin className="w-5 h-5" />
+                            <span>São Paulo, SP</span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                            <StarIcon className="w-5 h-5" />
+                            <span>4.8 (124 avaliações)</span>
+                        </span>
+                    </div>
           <NavigationTab
             activeTab={activeTab}
-            content={["Informações", "Necessidades", "Equipe", "Galeria"]}
+            content={["Informações", "Necessidades", "FAQ", "Galeria"]}
             handleTabClick={handleTabClick}
           />
+          {renderContent()}
         </div>
-        {renderContent()}
+        
       </section>
     </>
   );
