@@ -4,8 +4,9 @@ import { OngCardEdit } from "@/components/OngCardEdit";
 import { NavigationTab } from "@/components/NavigationTab";
 import { useState } from "react";
 
-import { StarIcon, MapPin } from 'lucide-react'
+import { StarIcon, MapPin, Plus, Upload } from 'lucide-react'
 import FAQ from "@/components/FAQ";
+import { Button } from "@/components/Button";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -187,8 +188,10 @@ export const UpdateOng = () => {
         );
       case "Necessidades":
         return (
-          <div className="flex justify-center w-full">
-            <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex justify-center items-center w-full flex-col gap-4">
+            <div className="grid grid-cols-4 gap-6.5">
+              <OngCardEdit />
+              <OngCardEdit />
               <OngCardEdit />
               <OngCardEdit />
               <OngCardEdit />
@@ -196,8 +199,60 @@ export const UpdateOng = () => {
               <OngCardEdit />
               <OngCardEdit />
             </div>
+
+            <div className="border border-gray-300 rounded-md p-4 w-full">
+              <h3 className="text-[1.3rem] font-bold mb-1">
+                Adicionar nova necessidade
+              </h3>
+
+              <div className="flex gap-3 w-full justify-between">
+                  <Input 
+                      label="Nome do Item"
+                      isFlex1={true}
+                  />
+                  <Input 
+                      label="Quantidade"
+                  />
+                  <Input 
+                      label="Prioridade"
+                  />
+
+              </div>
+
+              <div className="mt-4">
+                <Button size="sm" icon={<Plus />}>
+                  Adicionar
+                </Button>
+              </div>
+            </div>
           </div>
         );
+        case "Galeria":
+          return (
+            <div className="w-full flex flex-col gap-3">
+              <div className="grid grid-cols-6 gap-4">
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                <div className="aspect-square bg-gray-200 rounded-lg"></div>
+              <div className="aspect-square bg-gray-200 rounded-lg"></div>
+
+              
+            </div>
+
+            <div className="flex items-center gap-3 justify-center border border-gray-300 rounded-md p-4">
+              <Input
+                type="file"
+                isFlex1={true}
+                label="Fazer upload de fotos"
+              />
+              <Upload />
+            </div>
+        </div>
+          )
       default:
         return null;
     }

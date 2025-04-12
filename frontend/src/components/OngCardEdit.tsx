@@ -33,7 +33,7 @@ export const OngCardEdit = () => {
   };
 
   return (
-    <div className="border border-gray-300 rounded-md p-4 w-[360px]">
+    <div className="border border-gray-300 rounded-md p-4 w-[300px]">
       <div className="flex justify-between items-start mb-2">
         <h2 className="text-xl font-bold">{foodItem.name}</h2>
         <div className="flex gap-2">
