@@ -9,13 +9,15 @@ import { RegisterOng } from '@/pages/RegisterOng';
 import { FAQPage } from './pages/FAQ';
 import { ShoppingCart } from './pages/Cart';
 import { UpdateOng } from '@/pages/UpdateOng';
+import { Home } from '@/pages/Home';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route path='/' element={<Dashboard />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/ong' element={<OngDetails />} />
           <Route path='/user' element={<UserProfile />} />
           <Route path='/ong/update' element={<UpdateOng />} />

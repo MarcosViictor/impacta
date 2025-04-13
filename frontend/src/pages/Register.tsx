@@ -60,7 +60,10 @@ export const Register = () => {
               fullWidth={true}
               type="password"
             />
-            <Button size="lg">Entrar</Button>
+            <Button 
+            as={Link}
+            to={'/search'}
+            size="lg">Criar conta</Button>
 
             <p className="flex gap-1 text-gray-600 text-[.9rem]">
               Já tem uma conta?
@@ -116,14 +119,7 @@ export const Register = () => {
           </div>
         </div>
         <div className="rounded-lg p-8 flex flex-col items-center justify-center border-3 border-beige-100 w-[580px]  gap-6 shadow-lg">
-          <div className="flex flex-col w-full items-start">
-            <h1 className="text-center font-semibold text-3xl">
-              Cadastro de Doador
-            </h1>
-            <p className="text-gray-600 text-[.8rem]">
-              Crie sua conta para começar a doar e ajudar ONGs
-            </p>
-          </div>
+          
 
           {renderTabContent()}
 
