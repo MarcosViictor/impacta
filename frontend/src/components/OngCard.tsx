@@ -30,22 +30,18 @@ export const OngCard = ( {name, description, city, state } : OngCardProps) => {
                         </span>
                     </div>
 
-                    <div className="flex justify-between pt-5">
+                    <div className=" pt-5">
                         <Button
                             variant="light"
                             size="sm"
                             as={Link}
                             to="/ong"
+                            
                         >
                             Ver detalhes
                         </Button>
 
-                        <Button
-                            size="sm"
-                            className=""
-                        >
-                            <p className="px-3">Doar</p>
-                        </Button>
+        
                     </div>
                 </div>
             </div>

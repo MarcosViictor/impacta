@@ -47,7 +47,7 @@ export const SearchPage = () => {
                 </div>
                 
                 <div className="w-full max-w-[78rem]">
-                    <div className="flex flex-wrap justify-center gap-6">
+                    <div className=" grid grid-cols-3 gap-6">
                         {DataOng.map(data => (
                             <OngCard
                                 key={data.id}
