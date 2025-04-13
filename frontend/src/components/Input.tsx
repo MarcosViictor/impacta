@@ -4,6 +4,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   isFlex1?: boolean;
+  fullWidth?: boolean;
   value?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
@@ -16,13 +17,20 @@ export const Input = ({
   type = "text",
   error,
   isFlex1,
+  fullWidth,
   ...rest
 }: InputProps) => {
   return (
-    <div className={`flex flex-col gap-1 ${isFlex1 ? "flex-1" : ""}`}>
-      <label htmlFor={label} className="text-sm font-medium">
-        {label}
-      </label>
+    <div
+      className={`flex flex-col gap-1 ${
+        isFlex1 ? "flex-1" : ""
+      } ${fullWidth ? "w-full" : ""}`}
+    >
+      {label && (
+        <label htmlFor={label} className="text-sm font-medium">
+          {label}
+        </label>
+      )}
 
       <input
         id={label}
@@ -30,9 +38,9 @@ export const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`w-full mt-1 border rounded-md p-2 ${
+        className={`mt-1 border rounded-md p-2 ${
           error ? "border-[#ef5252] border-2" : "border-gray-300"
-        }`}
+        } ${fullWidth ? "w-full" : ""}`}
         {...rest}
       />
 
