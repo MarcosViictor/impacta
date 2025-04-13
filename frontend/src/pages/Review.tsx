@@ -6,9 +6,15 @@ export const Review = () => {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
   const [hover, setHover] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = () => {
-    console.log({ rating, comment });
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    // Simulando uma chamada à API
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsLoading(false);
+    setRating(0);
+    setComment('');
   };
 
   return (
@@ -18,10 +24,10 @@ export const Review = () => {
       
       <div className="flex gap-2 mb-6">
         {[1, 2, 3, 4, 5].map((star) => (
-          < Star 
+          <Star 
             key={star}
-            className={`w-8 h-8 cursor-pointer transition-colors ${
-              hover >= star || rating >= star ? 'text-yellow-400' : 'text-gray-300'
+            className={`w-8 h-8 cursor-pointer transition-all duration-200 transform hover:scale-110 ${
+              hover >= star || rating >= star ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
             }`}
             onClick={() => setRating(star)}
             onMouseEnter={() => setHover(star)}
@@ -40,11 +46,11 @@ export const Review = () => {
       <Button
         onClick={handleSubmit}
         width='full'
+        disabled={isLoading}
+        className="transition-all transform hover:scale-[1.02] active:scale-[0.98]"
       >
-        Enviar Avaliação
+        {isLoading ? 'Enviando...' : 'Enviar Avaliação'}
       </Button>
-
-    
     </div>
   );
 };
