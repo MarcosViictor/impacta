@@ -47,13 +47,7 @@ export const CardInformations = (props: CardInformationsProps) => {
           >
             <span>♥</span> Doar Agora
           </Button>
-          <Button
-            variant="light"
-            width="full"
-            className="flex items-center justify-center gap-2"
-          >
-            <Mail className="w-4 h-4" /> Entrar em Contato
-          </Button>
+          
         </div>
       </div>
 
