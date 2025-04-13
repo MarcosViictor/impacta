@@ -60,7 +60,10 @@ export const Register = () => {
               fullWidth={true}
               type="password"
             />
-            <Button size="lg">Entrar</Button>
+            <Button 
+            as={Link}
+            to={'/search'}
+            size="lg">Criar conta</Button>
 
             <p className="flex gap-1 text-gray-600 text-[.9rem]">
               Já tem uma conta?

@@ -41,7 +41,10 @@ export const Login = () => {
               fullWidth={true}
               type="password"
             />
-            <Button size="lg">Entrar</Button>
+            <Button 
+            as={Link}
+            to={'/search'}
+            size="lg">Entrar</Button>
 
             <p className="flex gap-1 text-gray-600 text-[.9rem]">
               Não tem uma conta?
