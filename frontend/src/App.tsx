@@ -6,25 +6,31 @@ import { SearchPage } from '@/pages/SearchPage';
 import { Login } from '@/pages/Login';
 import { Register } from '@/pages/Register';
 import { RegisterOng } from '@/pages/RegisterOng';
+import { FAQPage } from './pages/FAQ';
+import { ShoppingCart } from './pages/Cart';
+import { UpdateOng } from '@/pages/UpdateOng';
+import { Home } from '@/pages/Home';
 
 function App() {
-
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route path='/' element={<Dashboard />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/ong' element={<OngDetails />} />
           <Route path='/user' element={<UserProfile />} />
+          <Route path='/ong/update' element={<UpdateOng />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/register/ong' element={<RegisterOng />} />
-          
+          <Route path='/faq' element={<FAQPage />} />
+          <Route path='/cart' element={<ShoppingCart />} />
         </Routes>
-      </BrowserRouter>
-    </>
-  )
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
