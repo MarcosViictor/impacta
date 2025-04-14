@@ -2,6 +2,7 @@ import { CardInformations } from "@/components/CardInformations"
 import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
 import { Itens } from "@/components/Itens"
+import { Maps } from "@/components/Maps"
 
 import { useState } from "react"
 
@@ -122,6 +123,8 @@ export const OngDetails = () => {
                     />
                 </div>
             </section>
+
+            <Maps />
         </>
     )
 }
