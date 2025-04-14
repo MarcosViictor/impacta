@@ -3,11 +3,13 @@ import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
 import { Itens } from "@/components/Itens"
 import Review from '@/pages/Review'
+import { Maps } from "@/components/Maps"
 
 import { useState } from "react"
 
 import { StarIcon, MapPin } from 'lucide-react'
 import { NavigationTab } from "@/components/NavigationTab"
+import { CardFAQ } from "@/components/CardFAQ"
 
 export const OngDetails = () => {
     const [activeTab, setActiveTab] = useState('Sobre')
@@ -47,22 +49,21 @@ export const OngDetails = () => {
                         </ul>
                     </div>
                 )
-            case 'Algo':
+            case 'FAQ':
                 return (
                     <div className="space-y-4">
-                        <h3 className="text-xl font-semibold">Próximos Eventos:</h3>
-                        <div className="space-y-4">
-                            <div className="p-4 bg-gray-50 rounded-lg">
-                                <h4 className="font-semibold">Feira de Adoção</h4>
-                                <p className="text-gray-600">Data: 15/05/2024</p>
-                                <p className="text-gray-600">Local: Parque Villa-Lobos</p>
-                            </div>
-                            <div className="p-4 bg-gray-50 rounded-lg">
-                                <h4 className="font-semibold">Campanha de Vacinação</h4>
-                                <p className="text-gray-600">Data: 22/05/2024</p>
-                                <p className="text-gray-600">Local: Sede da ONG</p>
-                            </div>
-                        </div>
+                        <CardFAQ 
+                            title="exemplo"
+                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
+                        />
+                         <CardFAQ 
+                            title="exemplo"
+                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
+                        />
+                         <CardFAQ 
+                            title="exemplo"
+                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
+                        />
                     </div>
                 )
             case 'Galeria':
@@ -113,7 +114,7 @@ export const OngDetails = () => {
                     <NavigationTab
                         activeTab={activeTab}
                         handleTabClick={handleTabClick}
-                        content={['Sobre', 'Necessidades', 'Algo', 'Galeria', 'Avaliações']}
+                        content={['Sobre', 'Necessidades', 'FAQ', 'Galeria', 'Avaliações']}
                     />
 
                     {renderTabContent()}
@@ -129,6 +130,8 @@ export const OngDetails = () => {
                     />
                 </div>
             </section>
+
+            <Maps />
         </>
     )
 }

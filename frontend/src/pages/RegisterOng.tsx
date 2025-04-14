@@ -8,6 +8,7 @@ import Logo from "@/static/assets/logo.svg";
 import { useState } from "react";
 
 import { Camera } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const RegisterOng = () => {
   const [step, setStep] = useState(1); // Estado para controlar o passo do formulário
@@ -205,7 +206,11 @@ export const RegisterOng = () => {
                 <Button size="sm" variant="light" onClick={handleBack}>
                   Voltar
                 </Button>
-                <Button size="sm">
+                <Button 
+                  as={Link}
+                  to="/dashboard"
+                  size="sm"
+                >
                   Finalizar Cadastro
                 </Button>
               </div>
