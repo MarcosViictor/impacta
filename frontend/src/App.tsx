@@ -14,6 +14,7 @@ import { CadastroOng } from '@/pages/CadastroOng';
 import { TelaCadastro } from './pages/TelaCadastro';
 import { TelaEntra } from './pages/TelaEntrar';
 import { ProfileEdit } from './pages/ProfileEdit';
+import Review from './pages/Review';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/register/ong' element={<RegisterOng />} />
           <Route path='/faq' element={<FAQPage />} />
+          <Route path='/review' element={<Review />} />
           <Route path='/cart' element={<ShoppingCart />} />
           <Route path='/entrar' element={<TelaEntra />} />
           <Route path='/profile' element={<ProfileEdit />} />
