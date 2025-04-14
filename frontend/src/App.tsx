@@ -10,6 +10,10 @@ import { FAQPage } from './pages/FAQ';
 import { ShoppingCart } from './pages/Cart';
 import { UpdateOng } from '@/pages/UpdateOng';
 import { Home } from '@/pages/Home';
+import { CadastroOng } from '@/pages/CadastroOng';
+import { TelaCadastro } from './pages/TelaCadastro';
+import { TelaEntra } from './pages/TelaEntrar';
+import { ProfileEdit } from './pages/ProfileEdit';
 
 function App() {
   return (
@@ -20,6 +24,9 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/ong' element={<OngDetails />} />
           <Route path='/user' element={<UserProfile />} />
+          <Route path='/cadastro-ong' element={<CadastroOng />} />
+          <Route path='/cadastro' element={<TelaCadastro />} />
+          
           <Route path='/ong/update' element={<UpdateOng />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/login' element={<Login />} />
@@ -27,6 +34,8 @@ function App() {
           <Route path='/register/ong' element={<RegisterOng />} />
           <Route path='/faq' element={<FAQPage />} />
           <Route path='/cart' element={<ShoppingCart />} />
+          <Route path='/entrar' element={<TelaEntra />} />
+          <Route path='/profile' element={<ProfileEdit />} />
         </Routes>
       </div>
     </BrowserRouter>
