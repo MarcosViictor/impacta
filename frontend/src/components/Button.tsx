@@ -63,7 +63,7 @@ export const Button = ({
       `}
       {...props}
     >
-      <div className="flex items-center justify-between gap-2 w-full">
+      <div className="flex items-center justify-center gap-2 w-full">
         {icon && <span className="w-6 h-6">{icon}</span>}
         {children}
       </div> 
