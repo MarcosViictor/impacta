@@ -1,7 +1,4 @@
 from django.db import models
-
-# myapp/models.py
-from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class AvaliationStatus(models.TextChoices):
@@ -42,15 +39,15 @@ class CartDonation(models.Model):
     def __str__(self):
         return f"CartDonation {self.id} - {self.org_id.name}"
 
-# Modelo Posts
+# Modelo Post
 class Post(models.Model):
-    org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='posts')
+    # org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='posts')
     image = models.URLField(max_length=200, blank=True, null=True)
     video = models.URLField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Post {self.id} - {self.org_id.name}"
+        return f"Post {self.id}"
 
 # Modelo Faq
 class Faq(models.Model):
@@ -62,20 +59,20 @@ class Faq(models.Model):
     def __str__(self):
         return f"FAQ {self.id} - {self.org_id.name}"
 
-# Modelo Donations
+# Modelo Donation (TEMPORÁRIO sem o User)
 class Donation(models.Model):
     org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='donations')
     item_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='donations')
-    id_donor = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='donations')
+    id_donor = models.IntegerField()  # Temporário até o User ser implementado
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f"Donation {self.id} - {self.org_id.name}"
 
-# Modelo Avaliation
+# Modelo Avaliation (TEMPORÁRIO sem o User)
 class Avaliation(models.Model):
     org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='avaliations')
-    id_donor = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='avaliations')
+    id_donor = models.IntegerField()  # Temporário até o User ser implementado
     comment = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
 
