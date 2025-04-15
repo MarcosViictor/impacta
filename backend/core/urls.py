@@ -1,10 +1,7 @@
-from django.http import HttpResponse
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-def Olaturma(request):
-    return HttpResponse("Olá turma!")
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ola/', Olaturma)
+    path('api/', include('api.urls')),  # Isso gera URLs tipo /api/posts/
 ]
