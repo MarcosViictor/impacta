@@ -4,7 +4,6 @@ from django.db import models
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Enums para os campos que usam ENUM
 class AvaliationStatus(models.TextChoices):
     ENU = 'EN', _('EN')  
 
