@@ -51,13 +51,13 @@ class Post(models.Model):
 
 # Modelo Faq
 class Faq(models.Model):
-    org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='faqs')
+    # org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='faqs')
     questions = models.CharField(max_length=200)
     response_org = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"FAQ {self.id} - {self.org_id.name}"
+        return f"FAQ {self.id} "
 
 # Modelo Donation (TEMPORÁRIO sem o User)
 class Donation(models.Model):
