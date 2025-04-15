@@ -1,7 +1,5 @@
 from django.db import models
-
-# myapp/models.py
-from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 class AvaliationStatus(models.TextChoices):
@@ -66,7 +64,7 @@ class Faq(models.Model):
 class Donation(models.Model):
     org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='donations')
     item_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='donations')
-    id_donor = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='donations')
+    id_donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='donations')
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -75,7 +73,7 @@ class Donation(models.Model):
 # Modelo Avaliation
 class Avaliation(models.Model):
     org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='avaliations')
-    id_donor = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='avaliations')
+    id_donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='avaliations')
     comment = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
 
