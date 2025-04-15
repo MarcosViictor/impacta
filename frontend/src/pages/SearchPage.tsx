@@ -14,7 +14,7 @@ import { useState } from "react"
 export const SearchPage = () => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false)
 
-    const handleApplyFilters = (selectedState) => {
+    const handleApplyFilters = (selectedState: string) => {
         console.log("Estado selecionado:", selectedState)
         setIsSidebarVisible(false)
     }
