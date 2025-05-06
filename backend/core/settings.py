@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+from django.contrib.auth.password_validation import ValidationError
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -100,18 +101,40 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+# Validador personalizado para caracteres especiais
+class SpecialCharacterValidator:
+    def validate(self, password, user=None):
+        if not any(char in '!@#$%^&*(),.?":{}|<>' for char in password):
+            raise ValidationError(
+                'A senha deve conter pelo menos um caractere especial: !@#$%^&*(),.?":{}|<>',
+                code='password_no_special',
+            )
+
+    def get_help_text(self):
+        return 'Sua senha deve conter pelo menos um caractere especial: !@#$%^&*(),.?":{}|<>'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'OPTIONS': {
+            'user_attributes': ('username', 'email', 'first_name', 'last_name'),
+            'max_similarity': 0.7,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'core.settings.SpecialCharacterValidator',
     },
 ]
 
