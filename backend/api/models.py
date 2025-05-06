@@ -1,26 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from users.models import CustomUser, Ong, userType
 
-class AvaliationStatus(models.TextChoices):
-    ENU = 'EN', _('EN')  
-
-class CartDonationUrgency(models.TextChoices):
-    ENU = 'EN', _('EN')  
-
-# Modelo Ong
-class Ong(models.Model):
-    name = models.CharField(max_length=30)
-    cnpj = models.CharField(max_length=14, unique=True)
-    mission = models.CharField(max_length=200)
-    localization = models.CharField(max_length=50)
-    type_performance = models.CharField(max_length=30)
-    avaliation_stats = models.CharField(max_length=10, choices=AvaliationStatus.choices)
-    date_criation = models.DateField()
-
-    def __str__(self):
-        return self.name
-
-# Modelo Item
 class Item(models.Model):
     name = models.CharField(max_length=30)
     category = models.CharField(max_length=20)
@@ -28,20 +9,26 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
-# Modelo CartDonation
-class CartDonation(models.Model):
-    org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='cart_donations')
-    item_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='cart_donations')
-    total_quantity = models.IntegerField()
-    remaining_quantity = models.IntegerField()
-    urgency = models.CharField(max_length=10, choices=CartDonationUrgency.choices)
+class Donation(models.Model):
+    org = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='received_donations')
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, related_name='donations')
+    donor = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='made_donations')
+    date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"CartDonation {self.id} - {self.org_id.name}"
+        return f"Donation {self.id} - {self.org.name}"
 
-# Modelo Post
+class Avaliation(models.Model):
+    org = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='avaliations')
+    donor = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='avaliations')
+    comment = models.CharField(max_length=100)
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Avaliation {self.id} - {self.org.name}"
+
 class Post(models.Model):
-    # org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='posts')
+    org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
     image = models.URLField(max_length=200, blank=True, null=True)
     video = models.URLField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=100)
@@ -49,32 +36,21 @@ class Post(models.Model):
     def __str__(self):
         return f"Post {self.id}"
 
-# Modelo Faq
+    def save(self, *args, **kwargs):
+        if self.org_user.user_type != userType.ONG:
+            raise ValueError("Apenas ONGs podem criar posts.")
+        super().save(*args, **kwargs)
+
 class Faq(models.Model):
-    # org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='faqs')
+    org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='faqs')
     questions = models.CharField(max_length=200)
     response_org = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"FAQ {self.id} "
+        return f"FAQ {self.id}"
 
-# Modelo Donation (TEMPORÁRIO sem o User)
-class Donation(models.Model):
-    org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='donations')
-    item_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='donations')
-    id_donor = models.IntegerField()  # Temporário até o User ser implementado
-    date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Donation {self.id} - {self.org_id.name}"
-
-# Modelo Avaliation (TEMPORÁRIO sem o User)
-class Avaliation(models.Model):
-    org_id = models.ForeignKey(Ong, on_delete=models.CASCADE, related_name='avaliations')
-    id_donor = models.IntegerField()  # Temporário até o User ser implementado
-    comment = models.CharField(max_length=100)
-    date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Avaliation {self.id} - {self.org_id.name}"
+    def save(self, *args, **kwargs):
+        if self.org_user.user_type != userType.ONG:
+            raise ValueError("Apenas ONGs podem criar FAQs.")
+        super().save(*args, **kwargs)
