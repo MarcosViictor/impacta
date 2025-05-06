@@ -27,20 +27,5 @@ services:
     depends_on:
       - postgres_master
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-    environment:
-      - VITE_PORT=5173
-      - CHOKIDAR_USEPOLLING=true  # Ajuda com hot reload dentro do Docker
-    command: "npm run dev -- --host 0.0.0.0"
-    depends_on:
-      - backend
-
 volumes:
   postgres_data:
