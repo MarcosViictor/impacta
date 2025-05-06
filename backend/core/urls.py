@@ -4,5 +4,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # aqui você define o prefixo /api/
+    path('api/', include('api.urls')),
+    path('api/auth/', include('users.urls')),  # aqui você define o prefixo /api/
 ]
