@@ -42,15 +42,18 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 class Faq(models.Model):
-    org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='faqs')
-    questions = models.CharField(max_length=200)
-    response_org = models.CharField(max_length=200)
+    question_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='questions')
+    org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='answers')
+    question = models.CharField(max_length=200)
+    answer = models.TextField(null=True, blank=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"FAQ {self.id}"
+        return f"FAQ {self.id} - Pergunta de {self.question_user} para {self.org_user}"
 
     def save(self, *args, **kwargs):
+        if self.question_user.user_type != userType.DONOR:
+            raise ValueError("Apenas doadores podem enviar perguntas.")
         if self.org_user.user_type != userType.ONG:
-            raise ValueError("Apenas ONGs podem criar FAQs.")
+            raise ValueError("Apenas ONGs podem ser responsáveis pela resposta.")
         super().save(*args, **kwargs)
