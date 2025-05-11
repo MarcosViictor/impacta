@@ -15,13 +15,15 @@ class FaqViewsSet(viewsets.ModelViewSet):
             raise ValidationError("Usuário não autenticado.")
         if self.request.user.user_type != userType.DONOR:
             raise ValidationError("Apenas doadores podem enviar perguntas.")
-        serializer.save(question_user=self.request.user)
 
-    def perform_update(self, serializer):
-        if not self.request.user.is_authenticated:
-            raise ValidationError("Usuário não autenticado.")
-        if self.request.user.user_type != userType.ONG:
-            raise ValidationError("Apenas ONGs podem responder FAQs.")
-        if self.request.user != self.get_object().org_user:
-            raise ValidationError("Você só pode responder FAQs destinadas à sua ONG.")
-        serializer.save()
+        org_id = self.request.data.get('org_user')  # <- agora está no lugar certo!
+        if not org_id:
+            raise ValidationError("É necessário especificar a ONG (org_user).")
+
+        from users.models import CustomUser
+        try:
+            org_user = CustomUser.objects.get(id=org_id, user_type=userType.ONG)
+        except CustomUser.DoesNotExist:
+            raise ValidationError("ONG não encontrada.")
+
+        serializer.save(question_user=self.request.user, org_user=org_user)

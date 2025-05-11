@@ -6,11 +6,28 @@ class faqSerializer(serializers.ModelSerializer):
     class Meta:
         model = Faq
         fields = ['id', 'question_user', 'org_user', 'question', 'answer', 'date']
-        read_only_fields = ['question_user', 'org_user', 'question', 'date']  # Protege todos exceto answer
+        read_only_fields = ['question_user',  'org_user', 'date']  
+
+    def validate_question(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("A pergunta não pode estar em branco.")
+        return value
+    
+    def perform_update(self, serializer):
+        
+        if not self.request.user.is_authenticated:
+            raise ValidationError("Usuário não autenticado.")
+        if self.request.user.user_type != userType.ONG:
+            raise ValidationError("Apenas ONGs podem responder FAQs.")
+        
+        faq = self.get_object()
+
+        if self.request.user != faq.org_user:
+            raise ValidationError("Você só pode responder FAQs destinadas à sua ONG.")
+        serializer.save()
 
     def validate(self, data):
-        # Em atualizações, verifica se o usuário é a ONG associada
-        if self.instance:  # Modo atualização
+        if self.instance:  
             request = self.context.get('request')
             if request and request.user.user_type != userType.ONG:
                 raise serializers.ValidationError("Apenas ONGs podem responder FAQs.")
