@@ -30,7 +30,7 @@ class Avaliation(models.Model):
 
 class Post(models.Model):
     org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
-    image = models.URLField(max_length=200, blank=True, null=True)
+    image = models.ImageField(upload_to='posts/', blank=True, null=True)
     video = models.URLField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=100)
 
