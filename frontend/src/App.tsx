@@ -16,6 +16,7 @@ import { TelaEntra } from './pages/TelaEntrar';
 import { ProfileEdit } from './pages/ProfileEdit';
 import Review from './pages/Review';
 import { PrivateRoute } from '@/components/PrivateRoute';
+import { ProtectedRoute } from '@/components/ProtectedRoutes';
 
 function App() {
   return (
@@ -23,17 +24,29 @@ function App() {
       <div className="min-h-screen bg-gray-50">
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/dashboard' element={
+            <ProtectedRoute allowedUserTypes={['ONG']}>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
           <Route path='/ong' element={<OngDetails />} />
-          <Route path='/user' element={<UserProfile />} />
+          <Route path='/user' element={
+            <ProtectedRoute allowedUserTypes={['DONOR']}>
+              <UserProfile />
+            </ProtectedRoute>
+          } />
           <Route path='/cadastro-ong' element={<CadastroOng />} />
           <Route path='/cadastro' element={<TelaCadastro />} />
           
-          <Route path='/ong/update' element={<UpdateOng />} />
+          <Route path='/ong/update' element={
+            <ProtectedRoute allowedUserTypes={['ONG']}>
+              <UpdateOng />
+            </ProtectedRoute>
+          } />
           <Route path='/search' element={
-            <PrivateRoute>
+            <ProtectedRoute allowedUserTypes={['DONOR', 'ONG']}>
               <SearchPage />
-            </PrivateRoute>
+            </ProtectedRoute>
           } />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
