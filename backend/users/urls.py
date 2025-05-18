@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import (
 )
 from users.views.userStatusView import UserStatusView
 from users.views.userProfileView import UserProfileView, ChangePasswordView
+from users.views.ongView import OngDetailView, OngListView  # ⬅️ Importando a view de ONG
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -14,4 +15,7 @@ urlpatterns = [
     path('status/', UserStatusView.as_view(), name='user_status'),
     path('profile/', UserProfileView.as_view(), name='user_profile'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
+    
+    path('ongs/', OngListView.as_view(), name='ong-list'),  
+    path('ongs/<int:id>/', OngDetailView.as_view(), name='ong-detail')
 ]
