@@ -33,16 +33,12 @@ export const Login = () => {
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError("Email inválido");
-      return;
-    }
-
     try {
-      const response = await LoginApi(formData);
-      console.log("Login bem sucedido:", response);
-      navigate("/search");
+      const data = await LoginApi(formData);
+      if (data && data.access) {
+        console.log("Login bem sucedido");
+        navigate("/search");
+      }
     } catch (error: any) {
       console.error("Erro no login:", error);
       if (error.response?.status === 401) {
