@@ -63,7 +63,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'core.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",       # React em desenvolvimento
+    "http://localhost:5173",       # React em desenvolvimento
     "https://meusite-frontend.com" # Substitua pelo domínio real em produção
 ]
 

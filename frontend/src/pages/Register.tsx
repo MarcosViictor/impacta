@@ -34,27 +34,53 @@ export const Register = () => {
       ...prev,
       [field]: value,
     }));
+    setError("")
   };
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
+    setError('');
 
-    if (
-      !formData.email ||
-      !formData.username ||
-      !formData.password ||
-      !formData.password2
-    ) {
-      setError('Preencha o campo vazio');
+    // Validação de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Email inválido');
+      return;
+    }
+
+    // Validação de nome de usuário
+    if (formData.username.length < 3) {
+      setError('Nome deve ter pelo menos 3 caracteres');
+      return;
+    }
+
+    // Validação de senha
+    if (formData.password.length < 8) {
+      setError('Senha deve ter pelo menos 8 caracteres');
+      return;
+    }
+
+    // Validação de confirmação de senha
+    if (formData.password !== formData.password2) {
+      setError('As senhas não coincidem');
       return;
     }
 
     try {
       const response = await createUser(formData);
       console.log('Usuário criado:', response);
-    } catch (error) {
+      navigate('/search');
+    } catch (error: any) {
       console.error('Erro no cadastro:', error);
-      setError('Erro ao registrar usuário');
+      if (error.response?.data?.email) {
+        setError('Este email já está em uso');
+      } else if (error.response?.data?.username) {
+        setError('Este nome de usuário já está em uso');
+      } else if (error.response?.data?.password) {
+        setError(error.response.data.password);
+      } else {
+        setError('Erro ao criar conta. Tente novamente.');
+      }
     }
   };
 
