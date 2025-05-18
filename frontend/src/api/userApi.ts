@@ -1,4 +1,4 @@
-import { userLogin, userTypes } from '@/types/userTypes';
+import { ongTypes, userLogin, userTypes } from '@/types/userTypes';
 import { setCookie } from '@/utils/cookies';
 import axios from 'axios';
 
@@ -30,6 +30,17 @@ export const Login = async (
     return data;
   } catch (error) {
     console.error('Erro ao autenticar usuário:', error);
+    throw error;
+  }
+};
+
+export const createOng = async (ongData: ongTypes) => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/register/ong/`, ongData);
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao cadastrar ONG:', error);
     throw error;
   }
 };

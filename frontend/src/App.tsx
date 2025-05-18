@@ -15,6 +15,7 @@ import { TelaCadastro } from './pages/TelaCadastro';
 import { TelaEntra } from './pages/TelaEntrar';
 import { ProfileEdit } from './pages/ProfileEdit';
 import Review from './pages/Review';
+import { PrivateRoute } from '@/components/PrivateRoute';
 
 function App() {
   return (
@@ -29,7 +30,11 @@ function App() {
           <Route path='/cadastro' element={<TelaCadastro />} />
           
           <Route path='/ong/update' element={<UpdateOng />} />
-          <Route path='/search' element={<SearchPage />} />
+          <Route path='/search' element={
+            <PrivateRoute>
+              <SearchPage />
+            </PrivateRoute>
+          } />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/register/ong' element={<RegisterOng />} />

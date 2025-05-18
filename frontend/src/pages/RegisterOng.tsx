@@ -5,13 +5,44 @@ import { Button } from "@/components/Button";
 
 import Logo from "@/static/assets/logo.svg";
 
-import { useState } from "react";
-
+import { useState, FormEvent } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Camera } from "lucide-react";
-import { Link } from "react-router-dom";
+
+import { createOng } from "@/api/userApi";
+import { ongTypes } from "@/types/userTypes";
 
 export const RegisterOng = () => {
   const [step, setStep] = useState(1); // Estado para controlar o passo do formulário
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState<ongTypes>({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+    street: "",
+    number: "",
+    district: "",
+    city: "",
+    state: "",
+    zip_code: "",
+    phone: "",
+    responsible_name: "",
+    responsible_role: "",
+    responsible_cpf: "",
+    responsible_phone: "",
+    responsible_email: "",
+    user_type: "ONG",
+  });
+
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleNext = () => {
     setStep(step + 1); // Avançar para o próximo passo
@@ -19,6 +50,25 @@ export const RegisterOng = () => {
 
   const handleBack = () => {
     setStep(step - 1);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (formData.password !== formData.password2) {
+      setError("As senhas não coincidem");
+      return;
+    }
+
+    try {
+      const response = await createOng(formData);
+      console.log("ONG cadastrada:", response);
+      navigate("/login");
+    } catch (error: any) {
+      console.error("Erro no cadastro:", error);
+      setError(error.response?.data?.message || "Erro ao cadastrar ONG");
+    }
   };
 
   const renderStep = () => {
@@ -36,20 +86,47 @@ export const RegisterOng = () => {
             </div>
 
             <div className="flex gap-5 flex-col w-full">
-              <Input label="Nome da ONG" fullWidth={true} />
-              <Input label="Descrição Curta" fullWidth={true} />
-              <Input label="Descrição Completa" fullWidth={true} />
-              <div className="flex gap-2 w-full">
+              <Input
+                label="Nome da ONG"
+                fullWidth={true}
+                onChange={(e) => handleChange("name", e.target.value)}
+                error={error}
+              />
+              <Input
+                label="E-mail"
+                type="email"
+                fullWidth={true}
+                onChange={(e) => handleChange("email", e.target.value)}
+                error={error}
+              />
+              <Input
+                label="Senha"
+                type="password"
+                fullWidth={true}
+                onChange={(e) => handleChange("password", e.target.value)}
+                error={error}
+              />
+              <Input
+                label="Repetir senha"
+                type="password"
+                fullWidth={true}
+                onChange={(e) => handleChange("password2", e.target.value)}
+                error={error}
+              />
+
+              {/* <Input label="Descrição Curta" fullWidth={true} />
+              <Input label="Descrição Completa" fullWidth={true} /> */}
+              {/* <div className="flex gap-2 w-full">
                 <Input label="Data da fundação" type="date" fullWidth={true} />
                 <Input
                   label="CNPJ"
                   placeholder="XXX.XXX.XXX/XXXX-XX"
                   fullWidth={true}
                 />
-              </div>
-              <Input label="Missão" fullWidth={true} />
+              </div> */}
+              {/* <Input label="Missão" fullWidth={true} /> */}
 
-              <div className="flex flex-col gap-2">
+              {/* <div className="flex flex-col gap-2">
                 <p>Imagem de Perfil (Logo)</p>
                 <div className="flex items-center gap-4">
                   <div className="bg-gray-300 w-20 h-20 rounded-[50%]"></div>
@@ -61,11 +138,11 @@ export const RegisterOng = () => {
                 <p className="text-[.8rem] text-gray-700">
                   Recomendado: imagem quadrada com pelo menos 200x200 pixels
                 </p>
-              </div>
+              </div> */}
 
               <div className="w-full flex justify-end">
-                <Button size="sm" onClick={handleNext}>
-                  Próximo
+                <Button size="sm" onClick={handleSubmit}>
+                  Cadastrar
                 </Button>
               </div>
             </div>
@@ -188,34 +265,29 @@ export const RegisterOng = () => {
               <Input label="Senha" type="password" fullWidth={true} />
               <Input label="Confirmar Senha" type="password" fullWidth={true} />
 
-            <div className="w-full ">
-              <h4 className="font-semibold text-[1.1rem]">Termos e Condições</h4>
-            </div>
+              <div className="w-full ">
+                <h4 className="font-semibold text-[1.1rem]">Termos e Condições</h4>
+              </div>
 
-            <div className="flex  flex-col w-full items-start">
+              <div className="flex  flex-col w-full items-start">
                 <div className="flex justify-start items-center gap-1 text-[.9rem]">
-                    <Input type="checkbox" />
-                    <p>Aceito os Termos de Uso</p>
+                  <Input type="checkbox" />
+                  <p>Aceito os Termos de Uso</p>
                 </div>
                 <div className="flex justify-start items-center gap-1 text-[.9rem]">
-                    <Input type="checkbox" />
-                    <p>Aceito a Política de Privacidade</p>
+                  <Input type="checkbox" />
+                  <p>Aceito a Política de Privacidade</p>
                 </div>
-            </div>
+              </div>
               <div className="w-full flex justify-between">
                 <Button size="sm" variant="light" onClick={handleBack}>
                   Voltar
                 </Button>
-                <Button 
-                  as={Link}
-                  to="/dashboard"
-                  size="sm"
-                >
+                <Button size="sm" onClick={handleSubmit}>
                   Finalizar Cadastro
                 </Button>
               </div>
             </div>
-
           </div>
         );
 
@@ -240,10 +312,7 @@ export const RegisterOng = () => {
           </p>
         </div>
 
-        <form action="">
-            {renderStep()}
-        </form>
-
+        <form action="">{renderStep()}</form>
       </div>
       <Footer />
     </>
