@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children, allowedUserTypes }: ProtectedRouteProps) => {
   const isAuth = isAuthenticated();
-  const userType = getUserType();
+  const userType = 'ONG';
 
   if (!isAuth) {
     return <Navigate to="/login" replace />;

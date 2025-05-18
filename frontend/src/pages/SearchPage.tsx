@@ -9,10 +9,32 @@ import { Filter } from "lucide-react"
 
 import { DataOng } from "@/data/DataOng"
 import { Button } from "@/components/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getOngs } from "@/api/listOngsApi"
+import { OngTypes } from "@/types/OngTypes"
 
 export const SearchPage = () => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false)
+    const [ongs, setOngs] = useState<OngTypes[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        fetchOngs()
+    }, [])
+
+    const fetchOngs = async () => {
+        try {
+            const response = await getOngs()
+            setOngs(response)
+            console.log(response)
+        } catch (error) {
+            setError('Erro ao carregar ONGs')
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleApplyFilters = (selectedState: string) => {
         console.log("Estado selecionado:", selectedState)
@@ -60,21 +82,26 @@ export const SearchPage = () => {
                 <div className="flex">
                     {isSidebarVisible && <SidebarFilters onApplyFilters={handleApplyFilters} />}
                     <div className="w-full max-w-[78rem]">
-                        <div className="grid grid-cols-3 gap-6">
-                            {DataOng.map(data => (
-                                <OngCard
-                                    key={data.id}
-                                    name={data.name}
-                                    description={data.description}
-                                    city={data.city}
-                                    state={data.state}
-                                />
-                            ))}
-                        </div>
+                        {loading ? (
+                            <p>Carregando ONGs...</p>
+                        ) : error ? (
+                            <p className="text-red-500">{error}</p>
+                        ) : (
+                            <div className="grid grid-cols-3 gap-6">
+                                {ongs.map(ong => (
+                                    <OngCard
+                                        key={ong.id}
+                                        name={ong.name}
+                                        description={ong.description}
+                                        // city={ong.city || ''}
+                                        // state={ong.state || ''}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
-            
             <Footer />
         </>
     )
