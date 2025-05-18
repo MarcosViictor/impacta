@@ -3,67 +3,102 @@ import { Button } from "@/components/Button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { NavigationTab } from "@/components/NavigationTab";
-
+import { useNavigate } from 'react-router-dom'
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import Logo from "@/static/assets/logo.svg";
+import { userTypes } from "@/types/userTypes";
+import { createUser } from "@/api/userApi";
 
 export const Register = () => {
   const [activeTab, setActiveTab] = useState("Doador");
+  const [error, setError] = useState('')
+  const userType = 'DONOR'
+
+   const [formData, setFormData] = useState<userTypes>({
+    email: '',
+    username: '',
+    password: '',
+    password2: '',
+    user_type: userType,
+  });
+  const navigate = useNavigate();
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
+  };
+
+    const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleRegister = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !formData.email ||
+      !formData.username ||
+      !formData.password ||
+      !formData.password2
+    ) {
+      setError('Preencha o campo vazio');
+      return;
+    }
+
+    try {
+      const response = await createUser(formData);
+      console.log('Usuário criado:', response);
+    } catch (error) {
+      console.error('Erro no cadastro:', error);
+      setError('Erro ao registrar usuário');
+    }
   };
 
   const renderTabContent = () => {
     switch (activeTab) {
       case "Doador":
         return (
-          <form className="flex gap-5 flex-col w-full">
+          <form className="flex gap-5 flex-col w-full" onSubmit={handleRegister}>
             <Input
               label="Nome Completo"
               placeholder="Anakin Skywalker"
               fullWidth={true}
+              onChange={(e) => handleChange("username", e.target.value)}
+              error={error}
             />
             <Input
               label="E-mail"
               placeholder="mail@mail.com"
               fullWidth={true}
+              onChange={(e) => handleChange("email", e.target.value)}
+              error={error}
             />
-            <Input
-              label="Telefone"
-              placeholder="(DDD) 91111-1111"
-              fullWidth={true}
-            />
-            <div className="flex gap-2 w-full">
-              <Input
-                label="Cidade"
-                placeholder="mail@mail.com"
-                fullWidth={true}
-              />
-              <Input
-                label="Estado"
-                placeholder="mail@mail.com"
-                fullWidth={true}
-              />
-            </div>
             <Input
               label="Senha"
               placeholder="********"
               fullWidth={true}
               type="password"
+              onChange={(e) => handleChange("password", e.target.value)}
+              error={error}
             />
             <Input
               label="Confirmar senha"
               placeholder="********"
               fullWidth={true}
               type="password"
+              onChange={(e) => handleChange("password2", e.target.value)}
+              error={error}
             />
             <Button 
-            as={Link}
-            to={'/search'}
-            size="lg">Criar conta</Button>
+            size="lg"
+            type="submit"
+            >
+              Criar conta
+            </Button>
 
             <p className="flex gap-1 text-gray-600 text-[.9rem]">
               Já tem uma conta?
