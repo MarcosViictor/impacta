@@ -8,6 +8,12 @@ class userType(models.TextChoices):
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     user_type = models.CharField(max_length=10, choices=userType.choices)
+    # Campos de localização
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=2, blank=True, null=True)
+    country = models.CharField(max_length=100, default='Brasil')
+    address = models.CharField(max_length=200, blank=True, null=True)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
