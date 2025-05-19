@@ -7,7 +7,7 @@ import { SidebarFilters } from "@/components/SidebarFilters"
 import { Search } from "lucide-react"
 import { Filter } from "lucide-react"
 
-import { DataOng } from "@/data/DataOng"
+// import { DataOng } from "@/data/DataOng"
 import { Button } from "@/components/Button"
 import { useEffect, useState } from "react"
 import { getOngs } from "@/api/listOngsApi"
@@ -91,6 +91,7 @@ export const SearchPage = () => {
                                 {ongs.map(ong => (
                                     <OngCard
                                         key={ong.id}
+                                        id={ong.id}
                                         name={ong.name}
                                         description={ong.description}
                                         // city={ong.city || ''}

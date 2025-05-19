@@ -23,6 +23,21 @@ export const getOngs = async (): Promise<OngTypes[]> => {
   }
 };
 
+export const getOngById = async (id: string): Promise<OngTypes> => {
+  const token = getCookie('access_token');
+  try {
+    const { data } = await axios.get(`${API_URL}/users/ongs/${id}/`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return data;
+  } catch (error) {
+    console.error('Erro ao buscar ONG:', error);
+    throw error;
+  }
+};
+
 console.log(token)
 
 

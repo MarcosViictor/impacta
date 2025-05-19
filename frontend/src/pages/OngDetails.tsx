@@ -5,14 +5,39 @@ import { Itens } from "@/components/Itens"
 import Review from '@/pages/Review'
 import { Maps } from "@/components/Maps"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { getOngById } from "@/api/listOngsApi"
+import { OngTypes } from "@/types/OngTypes"
 
 import { StarIcon, MapPin } from 'lucide-react'
 import { NavigationTab } from "@/components/NavigationTab"
 import { CardFAQ } from "@/components/CardFAQ"
 
 export const OngDetails = () => {
+    const { id } = useParams<{ id: string }>();
     const [activeTab, setActiveTab] = useState('Sobre')
+    const [ong, setOng] = useState<OngTypes | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchOngDetails = async () => {
+            if (!id) return;
+            try {
+                const data = await getOngById(id)
+                setOng(data)
+            } catch (error) {
+                console.error('Erro ao buscar ONG:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchOngDetails()
+    }, [id])
+
+    if (loading) return <div>Carregando...</div>
+    if (!ong) return <div>ONG não encontrada</div>
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab)
@@ -91,14 +116,10 @@ export const OngDetails = () => {
     return (
         <>
             <Header /> 
-
-            <div className="h-[200px] bg-gray-300 mb-8">
-                
-            </div>
-
+            <div className="h-[200px] bg-gray-300 mb-8"></div>
             <section className="container mx-auto px-4 flex gap-8 justify-center mb-8">
                 <div className="w-[50%]">
-                    <h2 className="text-2xl font-bold mb-2">Alimentação</h2>
+                    <h2 className="text-2xl font-bold mb-2">{ong.name}</h2>
                     
                     <div className="mb-6 flex gap-4 items-center text-gray-500 text-sm">
                         <span className="flex items-center gap-1">

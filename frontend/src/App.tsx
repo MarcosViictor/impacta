@@ -15,7 +15,6 @@ import { TelaCadastro } from './pages/TelaCadastro';
 import { TelaEntra } from './pages/TelaEntrar';
 import { ProfileEdit } from './pages/ProfileEdit';
 import Review from './pages/Review';
-import { PrivateRoute } from '@/components/PrivateRoute';
 import { ProtectedRoute } from '@/components/ProtectedRoutes';
 
 function App() {
@@ -29,7 +28,7 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           } />
-          <Route path='/ong' element={<OngDetails />} />
+          <Route path='/ong/:id' element={<OngDetails />} />
           <Route path='/user' element={
             <ProtectedRoute allowedUserTypes={['DONOR']}>
               <UserProfile />

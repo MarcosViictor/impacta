@@ -7,7 +7,7 @@ import Logo from "@/static/assets/logo.svg";
 
 import { useState, FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Camera } from "lucide-react";
+// import { Camera } from "lucide-react";
 
 import { createOng } from "@/api/userApi";
 import { ongTypes } from "@/types/userTypes";

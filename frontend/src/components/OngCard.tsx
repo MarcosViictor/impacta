@@ -1,15 +1,16 @@
-import { MapPin } from "lucide-react"
+// import { MapPin } from "lucide-react"
 import { Button } from "./Button"
 import { Link } from "react-router-dom"
 
 interface OngCardProps {
+    id: number
     name: string
     description?: string
-    // city: string
-    // state: string
+    // city?: string
+    // state?: string
 }
 
-export const OngCard = ( {name, description } : OngCardProps) => {
+export const OngCard = ( {id, name, description  } : OngCardProps) => {
     return (
         <>
             <div className="w-[400px]">
@@ -35,7 +36,7 @@ export const OngCard = ( {name, description } : OngCardProps) => {
                             variant="light"
                             size="sm"
                             as={Link}
-                            to="/ong"
+                            to={`/ong/${id}`}
                             
                         >
                             Ver detalhes
