@@ -7,6 +7,7 @@ import Logo from "@/static/assets/logo.svg";
 import { Login as LoginApi } from "@/api/userApi";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getUserType } from "@/utils/auth";
 
 export const Login = () => {
   const [error, setError] = useState("");
@@ -36,9 +37,15 @@ export const Login = () => {
     try {
       const data = await LoginApi(formData);
       if (data && data.access) {
-        console.log("Login bem sucedido");
-        navigate("/search");
+        console.log("Login bem sucedido", data);
       }
+      const userType = getUserType()
+      if(userType === 'ONG') {
+        navigate('/dashboard')
+      } else if (userType === 'DONOR') {
+        navigate('/search')
+      }
+
     } catch (error: any) {
       console.error("Erro no login:", error);
       if (error.response?.status === 401) {

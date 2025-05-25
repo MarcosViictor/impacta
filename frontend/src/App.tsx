@@ -43,7 +43,7 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path='/search' element={
-            <ProtectedRoute allowedUserTypes={['DONOR', 'ONG']}>
+            <ProtectedRoute allowedUserTypes={['DONOR']}>
               <SearchPage />
             </ProtectedRoute>
           } />

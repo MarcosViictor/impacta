@@ -1,11 +1,11 @@
-import { ongTypes, userLogin, userTypes } from '@/types/userTypes';
+import { OngTypes, UserLogin, User } from '@/types/userTypes';
 import { setCookie } from '@/utils/cookies';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://impacta-deploy.onrender.com/api';
 
 export const createUser = async (
-    userData: userTypes
+    userData: User
 ) => {
   try {
     const response = await axios.post(`${API_URL}/auth/register/`, userData);
@@ -18,13 +18,14 @@ export const createUser = async (
 };
 
 export const Login = async (
-    userData: userLogin
+    userData: UserLogin
 ) => {
   try {
     const { data } = await axios.post(`${API_URL}/auth/login/`, userData);
     if (data) {
       setCookie('access_token', data.access);
       setCookie('refresh_token', data.refresh);
+      
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;
     }
     return data;
@@ -34,9 +35,9 @@ export const Login = async (
   }
 };
 
-export const createOng = async (ongData: ongTypes) => {
+export const createOng = async (ongData: OngTypes) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/register/ong/`, ongData);
+    const response = await axios.post(`${API_URL}/auth/register/`, ongData);
     console.log(response)
     return response.data;
   } catch (error) {

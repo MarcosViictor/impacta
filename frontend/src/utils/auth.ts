@@ -1,5 +1,4 @@
 import { getCookie } from './cookies';
-import { jwtDecode } from 'jwt-decode';
 
 export const isAuthenticated = () => {
   const token = getCookie('access_token');
@@ -7,12 +6,11 @@ export const isAuthenticated = () => {
 };
 
 export const getUserType = () => {
-  const token = getCookie('access_token');
-  if (!token) return null;
+  const userType = getCookie('user_type');
+  if (!userType) return null;
   
   try {
-    const decoded: any = jwtDecode(token);
-    return decoded.user_type;
+    return userType;
   } catch (error) {
     return null;
   }

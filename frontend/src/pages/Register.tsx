@@ -8,20 +8,25 @@ import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
 
 import Logo from "@/static/assets/logo.svg";
-import { userTypes } from "@/types/userTypes";
+import { User } from "@/types/userTypes";
 import { createUser } from "@/api/userApi";
+import { setCookie } from "@/utils/cookies";
 
 export const Register = () => {
   const [activeTab, setActiveTab] = useState("Doador");
   const [error, setError] = useState('')
   const userType = 'DONOR'
 
-   const [formData, setFormData] = useState<userTypes>({
+   const [formData, setFormData] = useState<User>({
     email: '',
     username: '',
     password: '',
     password2: '',
     user_type: userType,
+    address: 'Rua',
+    city: 'Trindas',
+    state: 'PE',
+    postal_code: '123123'
   });
   const navigate = useNavigate();
 
@@ -69,6 +74,7 @@ export const Register = () => {
     try {
       const response = await createUser(formData);
       console.log('Usuário criado:', response);
+      setCookie('user_type', response.user_type)
       navigate('/search');
     } catch (error: any) {
       console.error('Erro no cadastro:', error);

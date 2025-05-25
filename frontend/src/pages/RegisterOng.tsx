@@ -7,34 +7,31 @@ import Logo from "@/static/assets/logo.svg";
 
 import { useState, FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import { Camera } from "lucide-react";
+import { Camera } from "lucide-react";
 
 import { createOng } from "@/api/userApi";
-import { ongTypes } from "@/types/userTypes";
+import { OngTypes } from "@/types/userTypes";
+import { setCookie } from "@/utils/cookies";
 
 export const RegisterOng = () => {
   const [step, setStep] = useState(1); // Estado para controlar o passo do formulário
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<ongTypes>({
-    name: "",
-    email: "",
-    password: "",
-    password2: "",
-    street: "",
-    number: "",
-    district: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    phone: "",
-    responsible_name: "",
-    responsible_role: "",
-    responsible_cpf: "",
-    responsible_phone: "",
-    responsible_email: "",
-    user_type: "ONG",
+  const [formData, setFormData] = useState<OngTypes>({
+    email: '',
+    username: '',
+    first_name: '',
+    last_name:'',
+    ong_name:'',
+    password: '',
+    password2: '',
+    ong_description: '',
+    address:'', 
+    city: '',
+    state: '',
+    postal_code:'',
+    user_type: 'ONG',
   });
 
   const handleChange = (field: string, value: string) => {
@@ -44,11 +41,13 @@ export const RegisterOng = () => {
     }));
   };
 
-  const handleNext = () => {
-    setStep(step + 1); // Avançar para o próximo passo
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setStep(step + 1);
   };
 
-  const handleBack = () => {
+  const handleBack = (e: React.MouseEvent) => {
+    e.preventDefault();
     setStep(step - 1);
   };
 
@@ -56,18 +55,42 @@ export const RegisterOng = () => {
     e.preventDefault();
     setError("");
 
+    // Validações
+    if (!formData.email || !formData.username || !formData.password || !formData.password2) {
+      setError("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Email inválido");
+      return;
+    }
+
     if (formData.password !== formData.password2) {
       setError("As senhas não coincidem");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError("A senha deve ter pelo menos 8 caracteres");
       return;
     }
 
     try {
       const response = await createOng(formData);
       console.log("ONG cadastrada:", response);
+      setCookie('user_type', response.user_type)
       navigate("/login");
     } catch (error: any) {
       console.error("Erro no cadastro:", error);
-      setError(error.response?.data?.message || "Erro ao cadastrar ONG");
+      if (error.response?.data?.email) {
+        setError("Este email já está em uso");
+      } else if (error.response?.data?.username) {
+        setError("Este nome de usuário já está em uso");
+      } else {
+        setError("Erro ao cadastrar ONG. Tente novamente.");
+      }
     }
   };
 
@@ -89,42 +112,33 @@ export const RegisterOng = () => {
               <Input
                 label="Nome da ONG"
                 fullWidth={true}
-                onChange={(e) => handleChange("name", e.target.value)}
+                onChange={(e) => handleChange("ong_name", e.target.value)}
                 error={error}
               />
               <Input
                 label="E-mail"
                 type="email"
+                placeholder="ong@mail.com"
                 fullWidth={true}
                 onChange={(e) => handleChange("email", e.target.value)}
                 error={error}
               />
               <Input
-                label="Senha"
-                type="password"
+                label="Username"
+                type="text"
+                placeholder="@ong"
                 fullWidth={true}
-                onChange={(e) => handleChange("password", e.target.value)}
+                onChange={(e) => handleChange("username", e.target.value)}
                 error={error}
               />
-              <Input
-                label="Repetir senha"
-                type="password"
-                fullWidth={true}
-                onChange={(e) => handleChange("password2", e.target.value)}
-                error={error}
+        
+              <Input 
+                label="Descrição da ONG" 
+                fullWidth={true} 
+                placeholder="Descreva sobre o que é a ONG..."
+                onChange={(e) => handleChange("ong_description", e.target.value)}
+                error={error}  
               />
-
-              {/* <Input label="Descrição Curta" fullWidth={true} />
-              <Input label="Descrição Completa" fullWidth={true} /> */}
-              {/* <div className="flex gap-2 w-full">
-                <Input label="Data da fundação" type="date" fullWidth={true} />
-                <Input
-                  label="CNPJ"
-                  placeholder="XXX.XXX.XXX/XXXX-XX"
-                  fullWidth={true}
-                />
-              </div> */}
-              {/* <Input label="Missão" fullWidth={true} /> */}
 
               {/* <div className="flex flex-col gap-2">
                 <p>Imagem de Perfil (Logo)</p>
@@ -141,8 +155,12 @@ export const RegisterOng = () => {
               </div> */}
 
               <div className="w-full flex justify-end">
-                <Button size="sm" onClick={handleSubmit}>
-                  Cadastrar
+                <Button 
+                  size="sm" 
+                  onClick={handleNext}
+                  type="button"
+                >
+                  Próximo
                 </Button>
               </div>
             </div>
@@ -157,7 +175,7 @@ export const RegisterOng = () => {
                 Endereço de contato
               </h1>
               <p className="text-gray-600 text-[.8rem]">
-                Informe o endereço e contatos da sua ONG
+                Informe o endereço da ONG
               </p>
             </div>
 
@@ -165,43 +183,45 @@ export const RegisterOng = () => {
               <div className="w-full ">
                 <h4 className="font-semibold text-[1.2rem]">Endereço</h4>
               </div>
-              <div className="flex gap-2">
-                <Input label="Rua" fullWidth={true} />
-                <Input label="Número" fullWidth={true} />
-              </div>
-              <Input label="Descrição Curta" fullWidth={true} />
-              <Input label="Descrição Completa" fullWidth={true} />
-              <Input label="Complemento" fullWidth={true} />
-              <Input label="Bairro" fullWidth={true} />
+                <Input 
+                  label="Rua" 
+                  fullWidth={true} 
+                  onChange={(e) => handleChange("address", e.target.value)}
+                  error={error}/>
+                <Input 
+                  label="CEP" 
+                  placeholder="XXXXX-XXX" 
+                  fullWidth={true} 
+                  onChange={(e) => handleChange("postal_code", e.target.value)}
+                  error={error} />
               <div className="flex gap-2 w-full">
-                <Input label="Cidade" fullWidth={true} />
-                <Input label="Estado" placeholder="SP" fullWidth={true} />
+                <Input 
+                  label="Cidade" 
+                  fullWidth={true} 
+                  onChange={(e) => handleChange("city", e.target.value)}
+                  error={error}/>
+                <Input 
+                  label="Estado" 
+                  placeholder="SP" 
+                  fullWidth={true}
+                  onChange={(e) => handleChange("state", e.target.value)}
+                  error={error} />
               </div>
-              <Input label="CEP" placeholder="XXXXX-XXX" fullWidth={true} />
-
-              <div className="w-full ">
-                <h4 className="font-semibold text-[1.2rem]">
-                  Informações de Contato
-                </h4>
-              </div>
-
-              <Input label="E-mail" type="email" fullWidth={true} />
-              <Input
-                label="Telefone"
-                placeholder="(XX) XXXXX-XXXX"
-                fullWidth={true}
-              />
-              <Input
-                label="Website"
-                placeholder="www.exemplo.org.gov"
-                fullWidth={true}
-              />
 
               <div className="w-full flex justify-between">
-                <Button size="sm" variant="light" onClick={handleBack}>
+                <Button 
+                  size="sm" 
+                  variant="light" 
+                  onClick={handleBack}
+                  type="button"
+                >
                   Voltar
                 </Button>
-                <Button size="sm" onClick={handleNext}>
+                <Button 
+                  size="sm" 
+                  onClick={handleNext}
+                  type="button"
+                >
                   Próximo
                 </Button>
               </div>
@@ -222,19 +242,17 @@ export const RegisterOng = () => {
             </div>
 
             <div className="flex gap-5 flex-col w-full">
-              <Input label="Nome Completo" fullWidth={true} />
-              <Input label="Cargo" fullWidth={true} />
-              <Input
-                label="CPF"
-                placeholder="XXX.XXX.XXX-XX"
+              <Input 
+                label="Nome" 
+                fullWidth={true} 
+                onChange={(e) => handleChange("first_name", e.target.value)}
+                error={error}/>
+              <Input 
+                label="Sobrenome" 
                 fullWidth={true}
-              />
-              <Input
-                label="Telefone"
-                placeholder="(XX) XXXXX-XXXX"
-                fullWidth={true}
-              />
-              <Input label="E-mail" type="email" fullWidth={true} />
+                onChange={(e) => handleChange("last_name", e.target.value)}
+                error={error}/>
+              
 
               <div className="w-full flex justify-between">
                 <Button size="sm" variant="light" onClick={handleBack}>
@@ -262,8 +280,18 @@ export const RegisterOng = () => {
             </div>
 
             <div className="flex gap-5 flex-col w-full">
-              <Input label="Senha" type="password" fullWidth={true} />
-              <Input label="Confirmar Senha" type="password" fullWidth={true} />
+              <Input 
+                label="Senha" 
+                type="password" 
+                fullWidth={true} 
+                onChange={(e) => handleChange("password", e.target.value)}
+                error={error}/>
+              <Input 
+                label="Confirmar Senha" 
+                type="password" 
+                fullWidth={true} 
+                onChange={(e) => handleChange("password2", e.target.value)}
+                error={error}/>
 
               <div className="w-full ">
                 <h4 className="font-semibold text-[1.1rem]">Termos e Condições</h4>
@@ -312,7 +340,7 @@ export const RegisterOng = () => {
           </p>
         </div>
 
-        <form action="">{renderStep()}</form>
+        <form onSubmit={handleSubmit}>{renderStep()}</form>
       </div>
       <Footer />
     </>

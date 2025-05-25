@@ -16,6 +16,7 @@ export const Header = () => {
   const handleLogout = () => {
     removeCookie('access_token');
     removeCookie('refresh_token');
+    removeCookie('user_type')
     window.location.href = '/login';
   };
 
@@ -35,12 +36,7 @@ export const Header = () => {
 
     
         <nav className='flex items-center gap-8'>
-          <Link 
-            to='/search'
-            className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
-          >
-            Buscar ONGs
-          </Link>
+          
           
           {isAuth && userType === 'ONG' && (
             <>
@@ -60,12 +56,20 @@ export const Header = () => {
           )}
 
           {isAuth && userType === 'DONOR' && (
+            <>
+            <Link 
+              to='/search'
+              className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
+            >
+              Buscar ONGs
+            </Link>
             <Link 
               to='/user'
               className='relative font-medium text-black hover:text-blue-700 after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-0 after:bg-black after:transition-all hover:after:w-full'
             >
               Perfil
             </Link>
+            </>
           )}
 
         </nav>
