@@ -1,20 +1,12 @@
 import { OngTypes } from '@/types/OngTypes';
-import axios from 'axios';
 import { getCookie } from '@/utils/cookies';
-
-const API_URL = 'http://localhost:8000/api';
+import { api } from '@/utils/api';
 
 const token = getCookie('access_token');
 
 export const getOngs = async (): Promise<OngTypes[]> => {
   try {
-    const {data} = await axios.get(`${API_URL}/users/ongs/`,
-      {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      }
-    );
+    const {data} = await api.get(`/users/ongs/`);
     console.log(data)
     return data;
   } catch (error) {
@@ -26,7 +18,7 @@ export const getOngs = async (): Promise<OngTypes[]> => {
 export const getOngById = async (id: string): Promise<OngTypes> => {
   const token = getCookie('access_token');
   try {
-    const { data } = await axios.get(`${API_URL}/users/ongs/${id}/`, {
+    const { data } = await api.get(`/users/ongs/${id}/`, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
