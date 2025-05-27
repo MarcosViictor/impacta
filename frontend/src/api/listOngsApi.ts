@@ -2,7 +2,6 @@ import { OngTypes } from '@/types/OngTypes';
 import { getCookie } from '@/utils/cookies';
 import { api } from '@/utils/api';
 
-const token = getCookie('access_token');
 
 export const getOngs = async (): Promise<OngTypes[]> => {
   try {
@@ -16,13 +15,9 @@ export const getOngs = async (): Promise<OngTypes[]> => {
 };
 
 export const getOngById = async (id: string): Promise<OngTypes> => {
-  const token = getCookie('access_token');
   try {
-    const { data } = await api.get(`/users/ongs/${id}/`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
+    const { data } = await api.get(`/users/ongs/${id}/`);
+    console.log(data)
     return data;
   } catch (error) {
     console.error('Erro ao buscar ONG:', error);
@@ -30,6 +25,5 @@ export const getOngById = async (id: string): Promise<OngTypes> => {
   }
 };
 
-console.log(token)
 
 

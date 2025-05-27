@@ -124,7 +124,7 @@ export const OngDetails = () => {
                     <div className="mb-6 flex gap-4 items-center text-gray-500 text-sm">
                         <span className="flex items-center gap-1">
                             <MapPin className="w-5 h-5" />
-                            <span>São Paulo, SP</span>
+                            <span>{ong.city}</span>
                         </span>
                         <span className="flex items-center gap-1">
                             <StarIcon className="w-5 h-5" />
@@ -144,7 +144,7 @@ export const OngDetails = () => {
                 <div className="flex">
                     <CardInformations 
                         phone="11 99999-9999"
-                        email="contato@amigosdosanimais.org"
+                        email={ong.email || ''}
                         address="Rua dos Animais, 123 - Jardim Esperança"
                         city="São Paulo"
                         state="SP"
