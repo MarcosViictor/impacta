@@ -1,13 +1,16 @@
 import axios from "axios";
-import { getCookie } from "@/utils/cookies";
+import { getCookie } from "./cookies";
 
-const token = getCookie("access_token");
+const API_URL = "https://impacta-deploy.onrender.com/api";
 
 export const api = axios.create({
-  baseURL: "https://impacta-deploy.onrender.com/api",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
-  }
+  baseURL: API_URL,
+});
 
-})
+api.interceptors.request.use((config) => {
+  const token = getCookie("access_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});

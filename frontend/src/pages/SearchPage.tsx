@@ -21,7 +21,10 @@ export const SearchPage = () => {
 
     useEffect(() => {
         fetchOngs()
+        
     }, [])
+
+    
 
     const fetchOngs = async () => {
         try {

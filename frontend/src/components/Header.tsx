@@ -9,8 +9,19 @@ export const Header = () => {
   const [userType, setUserType] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsAuth(isAuthenticated());
-    setUserType(getUserType());
+    const checkAuth = () => {
+      setIsAuth(isAuthenticated());
+      setUserType(getUserType());
+    };
+    
+    checkAuth();
+    
+    // Escutar mudanças no localStorage/cookies
+    window.addEventListener('storage', checkAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+    };
   }, []);
 
   const handleLogout = () => {

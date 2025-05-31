@@ -1,5 +1,5 @@
 import { CardInformations } from "@/components/CardInformations"
-import { CardNumbers } from "@/components/CardNumbers"
+// import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
 import { Itens } from "@/components/Itens"
 import Review from '@/pages/Review'
@@ -51,11 +51,11 @@ export const OngDetails = () => {
                         <p className="text-gray-700 leading-relaxed">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!
                         </p>
-                        <div className="flex gap-2">
+                        {/* <div className="flex gap-2">
                             <CardNumbers number={43} label="Comunidades Atendidas" />
                             <CardNumbers number={32} label="Pessoas ajudadas" />
                             <CardNumbers number={12} label="KG de Alimentos arrecadados" />
-                        </div>
+                        </div> */}
                     </div>
                 )
             case 'Necessidades':

@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 import Logo from "@/static/assets/logo.svg";
 import { Login as LoginApi } from "@/api/userApi";
 import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getUserType } from "@/utils/auth";
 
 export const Login = () => {
@@ -15,7 +15,6 @@ export const Login = () => {
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({
@@ -41,9 +40,9 @@ export const Login = () => {
       }
       const userType = getUserType()
       if(userType === 'ONG') {
-        navigate('/dashboard')
+        window.location.href = "/dashboard";
       } else if (userType === 'DONOR') {
-        navigate('/search')
+        window.location.href = "/search";
       }
 
     } catch (error: any) {
