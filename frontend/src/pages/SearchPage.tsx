@@ -97,8 +97,8 @@ export const SearchPage = () => {
                                         id={ong.id}
                                         name={ong.name}
                                         description={ong.description}
-                                        // city={ong.city || ''}
-                                        // state={ong.state || ''}
+                                        city={ong.user.city || ''}
+                                        state={ong.user.state || ''}
                                     />
                                 ))}
                             </div>

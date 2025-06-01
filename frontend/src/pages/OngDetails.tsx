@@ -26,6 +26,7 @@ export const OngDetails = () => {
             try {
                 const data = await getOngById(id)
                 setOng(data)
+                console.log(data)
             } catch (error) {
                 console.error('Erro ao buscar ONG:', error)
             } finally {
@@ -48,14 +49,7 @@ export const OngDetails = () => {
             case 'Sobre':
                 return (
                     <div className="space-y-6">
-                        <p className="text-gray-700 leading-relaxed">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!
-                        </p>
-                        {/* <div className="flex gap-2">
-                            <CardNumbers number={43} label="Comunidades Atendidas" />
-                            <CardNumbers number={32} label="Pessoas ajudadas" />
-                            <CardNumbers number={12} label="KG de Alimentos arrecadados" />
-                        </div> */}
+                        <p className="text-gray-700 leading-relaxed">{ong.description}</p>
                     </div>
                 )
             case 'Necessidades':
@@ -124,11 +118,11 @@ export const OngDetails = () => {
                     <div className="mb-6 flex gap-4 items-center text-gray-500 text-sm">
                         <span className="flex items-center gap-1">
                             <MapPin className="w-5 h-5" />
-                            <span>{ong.city}</span>
+                            <span>{ong.user.city}, {ong.user.state}</span>
                         </span>
                         <span className="flex items-center gap-1">
                             <StarIcon className="w-5 h-5" />
-                            <span>4.8 (124 avaliações)</span>
+                            <span>{ong.avarage_rating > 0 ? ong.avarage_rating : 'Nenhuma avaliação'}</span>
                         </span>
                     </div>
 
@@ -144,10 +138,10 @@ export const OngDetails = () => {
                 <div className="flex">
                     <CardInformations 
                         phone="11 99999-9999"
-                        email={ong.email || ''}
-                        address="Rua dos Animais, 123 - Jardim Esperança"
-                        city="São Paulo"
-                        state="SP"
+                        email={ong.user.email || ''}
+                        address={`${ong.user.address} - ${ong.user.postal_code}`}
+                        city={ong.user.city}
+                        state={ong.user.state}
                     />
                 </div>
             </section>
