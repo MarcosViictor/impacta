@@ -1,6 +1,7 @@
 import { OngTypes, UserLogin, User } from '@/types/userTypes';
 import { setCookie } from '@/utils/cookies';
 import { api } from '@/utils/api';
+import { jwtDecode } from 'jwt-decode';
 
 export const createUser = async (
     userData: User
@@ -20,9 +21,13 @@ export const Login = async (
 ) => {
   try {
     const { data } = await api.post('/auth/login/', userData);
-    if (data) {
+    if (data && data.access) {
       setCookie('access_token', data.access);
       setCookie('refresh_token', data.refresh);
+      
+      // Decodifica o token JWT para obter as informações do usuário
+      const decodedToken = jwtDecode(data.access) as { user_id: number };
+      setCookie('user_id', decodedToken.user_id.toString());
     }
 
     return data;

@@ -2,11 +2,15 @@ import { Header } from "@/components/Header";
 import { Input } from "@/components/Input";
 import { OngCardEdit } from "@/components/OngCardEdit";
 import { NavigationTab } from "@/components/NavigationTab";
-import { useState } from "react";
+import {  useEffect, useState } from "react";
+import { createItemOng } from "@/api/createItemOng";
 
 import { StarIcon, MapPin, Plus, Upload } from 'lucide-react'
 import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
+import { getOngById } from "@/api/listOngsApi";
+import { getCookie } from "@/utils/cookies";
+import { ItemOngTypes } from "@/types/OngTypes";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -24,10 +28,36 @@ export const UpdateOng = () => {
   const [phone, setPhone] = useState("");
   const [website, setWebSite] = useState("");
   const [activeTab, setActiveTab] = useState("Informações");
+  const [itemData, setItemData] = useState<ItemOngTypes>({
+    name: "",
+    item: 1,
+    category: "",
+    urgency: "baixa",
+    status: "pendente",
+    quantity: 0,
+  });
+
+  //finalizar amanhã
+  
+  // const id = getCookie("user_id" ) || "";
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
+
+  const handleCreateItem = async () => {
+    try {
+      const response = await createItemOng(itemData);
+      console.log("Item created successfully:", response);
+    } catch (error) {
+      console.error("Error creating item:", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   getOngById(id)
+  //   console.log(id)
+  // }, [id]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -209,18 +239,42 @@ export const UpdateOng = () => {
                   <Input 
                       label="Nome do Item"
                       isFlex1={true}
+                      type="text"
+                      value={itemData.name}
+                      onChange={(e) => setItemData({ ...itemData, name: e.target.value })}
+                  />
+                  <Input 
+                      label="Categoria"
+                      type="text"
+                      isFlex1={true}
+                      value={itemData.category}
+                      onChange={(e) => setItemData({ ...itemData, category: e.target.value })}
+
                   />
                   <Input 
                       label="Quantidade"
+                      type="number"
+                      isFlex1={true}
+                      value={itemData.quantity.toString()}
+                      onChange={(e) => setItemData({ ...itemData, quantity: Number(e.target.value) })}
                   />
-                  <Input 
-                      label="Prioridade"
-                  />
+                  <div className="flex flex-col w-1/6">
+                    <label>Prioridade</label>
+                    <select
+                        className="border border-gray-300 rounded-md p-2 mt-1"
+                        onChange={(e) => setItemData({ ...itemData, urgency: e.target.value as "baixa" | "media" | "alta" })}
+                        value={itemData.urgency}
+                    >
+                      <option value="baixa">Baixa</option>
+                      <option value="media">Média</option>
+                      <option value="alta">Alta</option>
+                    </select>
+                  </div>
 
               </div>
 
               <div className="mt-4">
-                <Button size="sm" icon={<Plus />}>
+                <Button size="sm" icon={<Plus />} type="submit" onClick={handleCreateItem}>
                   Adicionar
                 </Button>
               </div>

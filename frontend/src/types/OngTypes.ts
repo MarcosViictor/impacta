@@ -23,3 +23,15 @@ export interface OngDetailsTypes {
     state: string;
     username: string;
 }
+
+type urgencyType = 'baixa' | 'media' | 'alta';
+
+export interface ItemOngTypes {
+    id?: number
+    item: number
+    quantity: number
+    urgency: urgencyType
+    status: string
+    name: string;
+    category: string;
+}
