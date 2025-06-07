@@ -10,7 +10,7 @@ import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
 import { getOngById } from "@/api/listOngsApi";
 import { getCookie } from "@/utils/cookies";
-import { ItemOngTypes } from "@/types/OngTypes";
+import { ItemOngTypes, OngNecessitiesTypes } from "@/types/OngTypes";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -30,16 +30,14 @@ export const UpdateOng = () => {
   const [activeTab, setActiveTab] = useState("Informações");
   const [itemData, setItemData] = useState<ItemOngTypes>({
     name: "",
-    item: 1,
     category: "",
-    urgency: "baixa",
-    status: "pendente",
-    quantity: 0,
   });
-
-  //finalizar amanhã
-  
-  // const id = getCookie("user_id" ) || "";
+  const [necessityData, setNecessityData] = useState<OngNecessitiesTypes>({
+    item: 0,
+    quantity: 0,
+    urgency: "baixa" as "baixa" | "media" | "alta",
+    status: "pendente",
+  });
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
@@ -232,7 +230,7 @@ export const UpdateOng = () => {
 
             <div className="border border-gray-300 rounded-md p-4 w-full">
               <h3 className="text-[1.3rem] font-bold mb-1">
-                Adicionar nova necessidade
+                Adicionar novo item
               </h3>
 
               <div className="flex gap-3 w-full justify-between">
@@ -251,19 +249,42 @@ export const UpdateOng = () => {
                       onChange={(e) => setItemData({ ...itemData, category: e.target.value })}
 
                   />
+
+              </div>
+
+              <div className="mt-4">
+                <Button size="sm" icon={<Plus />} type="submit" onClick={handleCreateItem}>
+                  Adicionar
+                </Button>
+              </div>
+            </div>
+            <div className="border border-gray-300 rounded-md p-4 w-full">
+              <h3 className="text-[1.3rem] font-bold mb-1">
+                Adicionar nova necessidade
+              </h3>
+
+              <div className="flex gap-3 w-full justify-between">
+                  <Input 
+                      label="Nome do Item"
+                      isFlex1={true}
+                      type="number"
+                      value={necessityData.item.toString()}
+                      onChange={(e) => setNecessityData({ ...necessityData, item: Number(e.target.value) })}
+
+                  />
                   <Input 
                       label="Quantidade"
                       type="number"
                       isFlex1={true}
-                      value={itemData.quantity.toString()}
-                      onChange={(e) => setItemData({ ...itemData, quantity: Number(e.target.value) })}
+                      value={necessityData.quantity.toString()}
+                      onChange={(e) => setNecessityData({ ...necessityData, quantity: Number(e.target.value) })}
                   />
                   <div className="flex flex-col w-1/6">
                     <label>Prioridade</label>
                     <select
                         className="border border-gray-300 rounded-md p-2 mt-1"
-                        onChange={(e) => setItemData({ ...itemData, urgency: e.target.value as "baixa" | "media" | "alta" })}
-                        value={itemData.urgency}
+                        onChange={(e) => setNecessityData({ ...necessityData, urgency: e.target.value as "baixa" | "media" | "alta" })}
+                        value={necessityData.urgency}
                     >
                       <option value="baixa">Baixa</option>
                       <option value="media">Média</option>

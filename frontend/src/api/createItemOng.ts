@@ -3,7 +3,7 @@ import { ItemOngTypes } from '../types/OngTypes';
 
 export const createItemOng = async (itemOng: ItemOngTypes): Promise<ItemOngTypes> => {
     try {
-        const response = await api.post(`/necessities/`, itemOng);
+        const response = await api.post(`/items`, itemOng);
         console.log('Item created for ONG:', response.data);
         return response.data;
     } catch (error) {
