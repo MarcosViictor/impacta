@@ -5,6 +5,7 @@ from users.models import CustomUser, Ong, userType
 class Item(models.Model):
     name = models.CharField(max_length=30)
     category = models.CharField(max_length=20)
+    quantity = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -43,20 +44,17 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 class Faq(models.Model):
-    question_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='questions')
-    org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='answers')
+    org_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='faqs')
     question = models.CharField(max_length=200)
     answer = models.TextField(null=True, blank=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"FAQ {self.id} - Pergunta de {self.question_user} para {self.org_user}"
+        return f"FAQ {self.id} - {self.org_user}"
 
     def save(self, *args, **kwargs):
-        if self.question_user.user_type != userType.DONOR:
-            raise ValueError("Apenas doadores podem enviar perguntas.")
         if self.org_user.user_type != userType.ONG:
-            raise ValueError("Apenas ONGs podem ser responsáveis pela resposta.")
+            raise ValueError("Apenas ONGs podem criar perguntas e respostas no FAQ.")
         super().save(*args, **kwargs)
 
 class Necessity(models.Model):
