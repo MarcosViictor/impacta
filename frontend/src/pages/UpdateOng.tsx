@@ -3,14 +3,15 @@ import { Input } from "@/components/Input";
 import { OngCardEdit } from "@/components/OngCardEdit";
 import { NavigationTab } from "@/components/NavigationTab";
 import {  useEffect, useState } from "react";
-import { createItemOng } from "@/api/createItemOng";
+import { createItemOng, getItemsOng } from "@/api/createItemOng";
 
 import { StarIcon, MapPin, Plus, Upload } from 'lucide-react'
 import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
 import { getOngById } from "@/api/listOngsApi";
 import { getCookie } from "@/utils/cookies";
-import { ItemOngTypes, OngNecessitiesTypes } from "@/types/OngTypes";
+import { ItemOngTypes, OngItemsResponseTypes, OngNecessitiesResponseTypes, OngNecessitiesTypes } from "@/types/OngTypes";
+import { createNecessityOng, getNecessityOng } from "@/api/necessityOngApi";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -31,6 +32,7 @@ export const UpdateOng = () => {
   const [itemData, setItemData] = useState<ItemOngTypes>({
     name: "",
     category: "",
+    quantity: 0,
   });
   const [necessityData, setNecessityData] = useState<OngNecessitiesTypes>({
     item: 0,
@@ -38,24 +40,57 @@ export const UpdateOng = () => {
     urgency: "baixa" as "baixa" | "media" | "alta",
     status: "pendente",
   });
+  const [necessity, setNecessity] = useState<OngNecessitiesResponseTypes[]>([]);
+  const [items, setItems] = useState<OngItemsResponseTypes[]>([]);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 
+  const fetchItems = async () => {
+    const items = await getItemsOng();
+    setItems(items);
+    console.log("Fetched items:", items);
+  }
+
+  const fetchNecessities = async () => {
+    try {
+      const necessities = await getNecessityOng();
+      console.log("Fetched necessities:", necessities);
+      setNecessity(necessities);
+    } catch (error) {
+      console.error("Error fetching necessities:", error);
+    }
+  }
+
   const handleCreateItem = async () => {
     try {
       const response = await createItemOng(itemData);
       console.log("Item created successfully:", response);
+      setItemData({ name: "", category: "", quantity: 0 }); // Reset item data after creation
+      fetchItems();
     } catch (error) {
       console.error("Error creating item:", error);
     }
   };
 
-  // useEffect(() => {
-  //   getOngById(id)
-  //   console.log(id)
-  // }, [id]);
+  const handleCreateNecessity = async () => {
+    try {
+      const response = await createNecessityOng(necessityData);
+      console.log("Necessity created successfully:", response);
+      setNecessityData({ item: 0, quantity: 0, urgency: "baixa", status: "pendente" }); // Reset necessity data after creation
+      fetchNecessities()
+    } catch (error) {
+      console.error("Error creating necessity:", error);
+    }
+  };
+
+  useEffect(() => {
+  
+        
+      fetchItems();
+      fetchNecessities();
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -216,16 +251,37 @@ export const UpdateOng = () => {
         );
       case "Necessidades":
         return (
-          <div className="flex justify-center items-center w-full flex-col gap-4">
-            <div className="grid grid-cols-4 gap-6.5">
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
+          <div className="flex justify-center  w-full flex-col gap-4">
+            <div className="w-full">
+              <h2 className="text-[1.3rem] pb-2 text-start">Itens</h2>
+              <div className="grid grid-cols-4 gap-6.5">
+                {items.map((item) => (
+                  <OngCardEdit
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    quantity={item.quantity.toString()}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="w-full">
+              <h2 className="text-[1.3rem] pb-2 text-start">Necessidades</h2>
+              <div className="grid grid-cols-4 gap-6.5">
+                {necessity.map((item) => (
+                  <OngCardEdit
+                    key={item.id}
+                    id={item.id}
+                    name={item.item_name}
+                    quantity={item.quantity.toString()}
+                    priority={
+                      item.urgency === "baixa" ? "Baixa" :
+                      item.urgency === "media" ? "Média" :
+                      item.urgency === "alta" ? "Alta" : "Baixa"
+                    }
+                  />
+                ))}
+              </div>
             </div>
 
             <div className="border border-gray-300 rounded-md p-4 w-full">
@@ -240,6 +296,7 @@ export const UpdateOng = () => {
                       type="text"
                       value={itemData.name}
                       onChange={(e) => setItemData({ ...itemData, name: e.target.value })}
+                                            
                   />
                   <Input 
                       label="Categoria"
@@ -248,6 +305,12 @@ export const UpdateOng = () => {
                       value={itemData.category}
                       onChange={(e) => setItemData({ ...itemData, category: e.target.value })}
 
+                  />
+                  <Input 
+                      label="Quantidade"
+                      type="number"
+                      value={itemData.quantity.toString()}
+                      onChange={(e) => setItemData({ ...itemData, quantity: Number(e.target.value) })}
                   />
 
               </div>
@@ -265,7 +328,7 @@ export const UpdateOng = () => {
 
               <div className="flex gap-3 w-full justify-between">
                   <Input 
-                      label="Nome do Item"
+                      label="ID do Item"
                       isFlex1={true}
                       type="number"
                       value={necessityData.item.toString()}
@@ -295,7 +358,7 @@ export const UpdateOng = () => {
               </div>
 
               <div className="mt-4">
-                <Button size="sm" icon={<Plus />} type="submit" onClick={handleCreateItem}>
+                <Button size="sm" icon={<Plus />} type="submit" onClick={handleCreateNecessity}>
                   Adicionar
                 </Button>
               </div>

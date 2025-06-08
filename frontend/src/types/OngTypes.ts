@@ -30,6 +30,7 @@ export interface ItemOngTypes {
     id?: number
     name: string
     category: string;
+    quantity: number;
 }
 
 export interface OngNecessitiesTypes {
@@ -40,4 +41,23 @@ export interface OngNecessitiesTypes {
     status: string
 
 
+}
+
+export interface OngNecessitiesResponseTypes {
+    id: number;
+    item: ItemOngTypes;
+    item_name: string;
+    org: number;
+    org_name: string;
+    quantity: number;
+    urgency?: urgencyType;
+    status: string;
+    created_at: string;
+}
+
+export interface OngItemsResponseTypes {
+    id: number;
+    name: string;
+    category: string;
+    quantity: number;
 }
