@@ -1,8 +1,4 @@
 export type Donation = {
-    id: number
-    nome: string
-    data: string
-    tipo: string
-    valor: string
-    status: string
+    ong: number; // ID of the ONG
+    item_id: number; // ID of the item being donated
   }
