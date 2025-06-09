@@ -11,6 +11,7 @@ const FAQ = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
+  
 
   useEffect(() => {
     fetchFaqs();

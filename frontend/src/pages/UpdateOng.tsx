@@ -8,8 +8,6 @@ import { createItemOng, getItemsOng } from "@/api/createItemOng";
 import { StarIcon, MapPin, Plus, Upload } from 'lucide-react'
 import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
-import { getOngById } from "@/api/listOngsApi";
-import { getCookie } from "@/utils/cookies";
 import { ItemOngTypes, OngItemsResponseTypes, OngNecessitiesResponseTypes, OngNecessitiesTypes } from "@/types/OngTypes";
 import { createNecessityOng, getNecessityOng } from "@/api/necessityOngApi";
 
@@ -272,8 +270,8 @@ export const UpdateOng = () => {
                   <OngCardEdit
                     key={item.id}
                     id={item.id}
-                    name={item.item_name}
-                    quantity={item.quantity.toString()}
+                    name={item.item_name || ''}
+                    quantity={(item.quantity || 0).toString()}
                     priority={
                       item.urgency === "baixa" ? "Baixa" :
                       item.urgency === "media" ? "Média" :

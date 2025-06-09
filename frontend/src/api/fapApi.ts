@@ -1,9 +1,18 @@
 import { api } from "@/utils/api";
 import { FaqTypes } from "@/types/FaqTypes";
+import { getCookie } from "@/utils/cookies";
 
-export const createFaq = async (Faq: FaqTypes) => {
+
+
+export const createFaq = async ({org_user, question, answer} : FaqTypes) => {
+    const getOngId = getCookie("ongId");
+
     try {
-        const response = await api.post(`/faqs/`, Faq);
+        const response = await api.post(`/faqs/`, {
+            org_user: getOngId,
+            question,
+            answer
+        });
         console.log('FAQ created:', response.data);
         return response.data;
     }

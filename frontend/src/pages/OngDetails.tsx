@@ -8,13 +8,22 @@ import { Maps } from "@/components/Maps"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { getOngById } from "@/api/listOngsApi"
-import { OngTypes } from "@/types/OngTypes"
+import { OngNecessitiesResponseTypes, OngTypes } from "@/types/OngTypes"
 
 import { StarIcon, MapPin } from 'lucide-react'
 import { NavigationTab } from "@/components/NavigationTab"
 import { CardFAQ } from "@/components/CardFAQ"
 import { getFaqs } from "@/api/fapApi"
 import { FaqTypes } from "@/types/FaqTypes"
+import { getNecessityOng } from "@/api/necessityOngApi"
+
+type NecessityType = {
+  id: number;
+  item_name: string;
+  quantity: number;
+  urgency: 'Alta' | 'Média' | 'Baixa';
+}
+
 
 export const OngDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -22,6 +31,8 @@ export const OngDetails = () => {
     const [ong, setOng] = useState<OngTypes | null>(null)
     const [faq, setFaq] = useState<FaqTypes[]>([])
     const [loading, setLoading] = useState(true)
+    const [necessities, setNecessities] = useState<NecessityType[]>([])
+
 
     useEffect(() => {
         const fetchOngDetails = async () => {
@@ -29,7 +40,8 @@ export const OngDetails = () => {
             try {
                 const data = await getOngById(id)
                 setOng(data)
-                console.log(data)
+                setNecessities(data.necessities)
+                console.log('ONG details fetched:', data);
             } catch (error) {
                 console.error('Erro ao buscar ONG:', error)
             } finally {
@@ -45,6 +57,8 @@ export const OngDetails = () => {
                 console.error('Erro ao buscar FAQs:', error)
             }
         }
+
+        
         fetchFaqs();
         fetchOngDetails()
     }, [id])
@@ -69,14 +83,15 @@ export const OngDetails = () => {
                     <div className="space-y-4">
                         <h3 className="text-xl font-semibold">Itens necessários:</h3>
                         <ul className="grid grid-cols-2 gap-2">
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
+                            {necessities.map((necessity) => (
+                                <Itens 
+                                    key={necessity.id}
+                                    name={necessity.item_name || ''}
+                                    quantity={(necessity.quantity || 0).toString()}
+                                    priority={necessity.urgency as "Alta" | "Média" | "Baixa"}
+                                />
+                            ))}
+                            
                         </ul>
                     </div>
                 )

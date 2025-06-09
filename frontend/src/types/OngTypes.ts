@@ -44,15 +44,15 @@ export interface OngNecessitiesTypes {
 }
 
 export interface OngNecessitiesResponseTypes {
-    id: number;
-    item: ItemOngTypes;
-    item_name: string;
-    org: number;
-    org_name: string;
-    quantity: number;
+    id?: number;
+    item?: ItemOngTypes;
+    item_name?: string;
+    org?: number;
+    org_name?: string;
+    quantity?: number;
     urgency?: urgencyType;
-    status: string;
-    created_at: string;
+    status?: string;
+    created_at?: string;
 }
 
 export interface OngItemsResponseTypes {
