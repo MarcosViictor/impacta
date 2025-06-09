@@ -13,11 +13,14 @@ import { OngTypes } from "@/types/OngTypes"
 import { StarIcon, MapPin } from 'lucide-react'
 import { NavigationTab } from "@/components/NavigationTab"
 import { CardFAQ } from "@/components/CardFAQ"
+import { getFaqs } from "@/api/fapApi"
+import { FaqTypes } from "@/types/FaqTypes"
 
 export const OngDetails = () => {
     const { id } = useParams<{ id: string }>();
     const [activeTab, setActiveTab] = useState('Sobre')
     const [ong, setOng] = useState<OngTypes | null>(null)
+    const [faq, setFaq] = useState<FaqTypes[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -34,6 +37,15 @@ export const OngDetails = () => {
             }
         }
 
+        const fetchFaqs = async () => {
+            try {
+                const faqs = await getFaqs();
+                setFaq(faqs);
+            } catch (error) {
+                console.error('Erro ao buscar FAQs:', error)
+            }
+        }
+        fetchFaqs();
         fetchOngDetails()
     }, [id])
 
@@ -71,18 +83,13 @@ export const OngDetails = () => {
             case 'FAQ':
                 return (
                     <div className="space-y-4">
-                        <CardFAQ 
-                            title="exemplo"
-                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
-                        />
-                         <CardFAQ 
-                            title="exemplo"
-                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
-                        />
-                         <CardFAQ 
-                            title="exemplo"
-                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
-                        />
+                        {faq.map((item) => (
+                            <CardFAQ 
+                                key={item.id}
+                                title={item.question}
+                                content={item.answer}
+                            />
+                        ))}
                     </div>
                 )
             case 'Galeria':
