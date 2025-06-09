@@ -4,6 +4,9 @@ from rest_framework.exceptions import ValidationError
 from api.models import Faq
 from api.serializers.faqSerializer import faqSerializer
 from users.models import userType
+import logging
+
+logger = logging.getLogger('api')
 
 
 class FaqViewsSet(viewsets.ModelViewSet):
@@ -11,8 +14,12 @@ class FaqViewsSet(viewsets.ModelViewSet):
     serializer_class = faqSerializer
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated:
+        user = self.request.user
+        if not user.is_authenticated:
+            logger.warning("Tentativa de criação de FAQ por usuário não autenticado.")
             raise ValidationError("Usuário não autenticado.")
-        if self.request.user.user_type != userType.ONG:
+        if user.user_type != userType.ONG:
+            logger.warning(f"Usuário {user} tentou criar FAQ sem permissão.")
             raise ValidationError("Apenas ONGs podem criar perguntas e respostas no FAQ.")
-        serializer.save(org_user=self.request.user)
+        logger.info(f"FAQ criado pela ONG {user}.")
+        serializer.save(org_user=user)
