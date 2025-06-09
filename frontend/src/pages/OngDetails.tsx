@@ -16,6 +16,8 @@ import { CardFAQ } from "@/components/CardFAQ"
 import { getFaqs } from "@/api/fapApi"
 import { FaqTypes } from "@/types/FaqTypes"
 import { getNecessityOng } from "@/api/necessityOngApi"
+import { createDonation } from "@/api/donationApi"
+import { DonationType } from "@/types/Donation"
 
 type NecessityType = {
   id: number;
@@ -32,6 +34,7 @@ export const OngDetails = () => {
     const [faq, setFaq] = useState<FaqTypes[]>([])
     const [loading, setLoading] = useState(true)
     const [necessities, setNecessities] = useState<NecessityType[]>([])
+    
 
 
     useEffect(() => {
@@ -69,6 +72,7 @@ export const OngDetails = () => {
     const handleTabClick = (tab: string) => {
         setActiveTab(tab)
     }
+
 
     const renderTabContent = () => {
         switch (activeTab) {
