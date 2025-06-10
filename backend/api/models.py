@@ -15,6 +15,12 @@ class Donation(models.Model):
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, related_name='donations')
     donor = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='made_donations')
     date = models.DateField(auto_now_add=True)
+    quantity = models.IntegerField()
+    status = models.CharField(max_length=20, choices=[
+        ('pendente', 'Pendente'),
+        ('confirmada', 'Confirmada'),
+        ('recusada', 'Recusada'),
+    ], default='pendente')
 
     def __str__(self):
         return f"Donation {self.id} - {self.org.name}"
