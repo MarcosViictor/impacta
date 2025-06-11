@@ -2,6 +2,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 import Logo from "@/static/assets/logo.svg";
 
@@ -15,6 +16,7 @@ import { setCookie } from "@/utils/cookies";
 export const RegisterOng = () => {
   const [step, setStep] = useState(1); // Estado para controlar o passo do formulário
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<OngTypes>({
@@ -53,26 +55,31 @@ export const RegisterOng = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     // Validações
     if (!formData.email || !formData.username || !formData.password || !formData.password2) {
       setError("Preencha todos os campos obrigatórios");
+      setIsLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Email inválido");
+      setIsLoading(false);
       return;
     }
 
     if (formData.password !== formData.password2) {
       setError("As senhas não coincidem");
+      setIsLoading(false);
       return;
     }
 
     if (formData.password.length < 8) {
       setError("A senha deve ter pelo menos 8 caracteres");
+      setIsLoading(false);
       return;
     }
 
@@ -80,9 +87,15 @@ export const RegisterOng = () => {
       const response = await createOng(formData);
       console.log("ONG cadastrada:", response);
       setCookie('user_type', response.user_type)
-      navigate("/login");
+      
+      // Aguarda um pouco para mostrar o loading
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/login");
+      }, 2000);
     } catch (error: any) {
       console.error("Erro no cadastro:", error);
+      setIsLoading(false);
       if (error.response?.data?.email) {
         setError("Este email já está em uso");
       } else if (error.response?.data?.username) {
@@ -337,6 +350,7 @@ export const RegisterOng = () => {
 
   return (
     <>
+      {isLoading && <LoadingScreen message="Cadastrando ONG..." />}
       <Header />
       <div className="justify-center flex items-center flex-1 flex-col gap-3 my-15">
         <div className="flex flex-col items-center gap-3 w-[580px]">

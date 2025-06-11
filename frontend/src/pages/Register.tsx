@@ -3,6 +3,7 @@ import { Button } from "@/components/Button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { NavigationTab } from "@/components/NavigationTab";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { useNavigate } from 'react-router-dom'
 import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
@@ -15,6 +16,7 @@ import { setCookie } from "@/utils/cookies";
 export const Register = () => {
   const [activeTab, setActiveTab] = useState("Doador");
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
   const userType = 'DONOR'
 
    const [formData, setFormData] = useState<User>({
@@ -45,29 +47,34 @@ export const Register = () => {
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     // Validação de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Email inválido');
+      setIsLoading(false);
       return;
     }
 
     // Validação de nome de usuário
     if (formData.username.length < 3) {
       setError('Nome deve ter pelo menos 3 caracteres');
+      setIsLoading(false);
       return;
     }
 
     // Validação de senha
     if (formData.password.length < 8) {
       setError('Senha deve ter pelo menos 8 caracteres');
+      setIsLoading(false);
       return;
     }
 
     // Validação de confirmação de senha
     if (formData.password !== formData.password2) {
       setError('As senhas não coincidem');
+      setIsLoading(false);
       return;
     }
 
@@ -75,9 +82,15 @@ export const Register = () => {
       const response = await createUser(formData);
       console.log('Usuário criado:', response);
       setCookie('user_type', response.user_type)
-      navigate('/search');
+      
+      // Aguarda um pouco para mostrar o loading
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate('/search');
+      }, 2000);
     } catch (error: any) {
       console.error('Erro no cadastro:', error);
+      setIsLoading(false);
       if (error.response?.data?.email) {
         setError('Este email já está em uso');
       } else if (error.response?.data?.username) {
@@ -166,6 +179,7 @@ export const Register = () => {
 
   return (
     <>
+      {isLoading && <LoadingScreen message="Criando conta..." />}
       <Header />
       <div className="justify-center flex items-center flex-1 flex-col gap-3 my-15">
         <div className="flex flex-col items-center gap-3 w-[580px]">
