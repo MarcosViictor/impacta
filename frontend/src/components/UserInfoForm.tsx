@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Input } from "./Input"
 import { Button } from "./Button"
+import { formatState } from "@/utils/masks"
 
 interface UserInfo {
   nome: string
@@ -19,9 +20,16 @@ export const UserInfoForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    let formattedValue = value;
+    
+    // Aplica máscara para estado
+    if (name === 'estado') {
+      formattedValue = formatState(value);
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: formattedValue
     }))
   }
 

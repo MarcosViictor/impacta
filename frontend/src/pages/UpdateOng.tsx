@@ -10,6 +10,7 @@ import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
 import { ItemOngTypes, OngItemsResponseTypes, OngNecessitiesResponseTypes, OngNecessitiesTypes } from "@/types/OngTypes";
 import { createNecessityOng, getNecessityOng } from "@/api/necessityOngApi";
+import { formatCEP, formatState } from "@/utils/masks";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -156,7 +157,7 @@ export const UpdateOng = () => {
                         label="CEP"
                         placeholder="01234-567"
                         value={cep}
-                        onChange={(e) => setCep(e.target.value)}
+                        onChange={(e) => setCep(formatCEP(e.target.value))}
                         type="text"
                       />
                       <Input
@@ -195,7 +196,7 @@ export const UpdateOng = () => {
                         label="Estado"
                         placeholder="SP"
                         value={state}
-                        onChange={(e) => setState(e.target.value)}
+                        onChange={(e) => setState(formatState(e.target.value))}
                         type="text"
                         isFlex1
                       />

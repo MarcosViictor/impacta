@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { createOng } from "@/api/userApi";
 import { OngTypes } from "@/types/userTypes";
 import { setCookie } from "@/utils/cookies";
+import { formatCEP, formatState, removeCEPMask } from "@/utils/masks";
 
 export const RegisterOng = () => {
   const [step, setStep] = useState(1); // Estado para controlar o passo do formulário
@@ -36,9 +37,18 @@ export const RegisterOng = () => {
   });
 
   const handleChange = (field: string, value: string) => {
+    let formattedValue = value;
+    
+    // Aplica máscaras específicas
+    if (field === 'postal_code') {
+      formattedValue = formatCEP(value);
+    } else if (field === 'state') {
+      formattedValue = formatState(value);
+    }
+    
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: formattedValue,
     }));
   };
 
@@ -84,7 +94,13 @@ export const RegisterOng = () => {
     }
 
     try {
-      const response = await createOng(formData);
+      // Remove máscara do CEP antes de enviar
+      const dataToSend = {
+        ...formData,
+        postal_code: removeCEPMask(formData.postal_code || '')
+      };
+      
+      const response = await createOng(dataToSend);
       console.log("ONG cadastrada:", response);
       setCookie('user_type', response.user_type)
       
