@@ -6,8 +6,7 @@ import { Button } from "@/components/Button";
 import Logo from "@/static/assets/logo.svg";
 
 import { useState, FormEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Camera } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { createOng } from "@/api/userApi";
 import { OngTypes } from "@/types/userTypes";
@@ -112,6 +111,7 @@ export const RegisterOng = () => {
               <Input
                 label="Nome da ONG"
                 fullWidth={true}
+                value={formData.ong_name}
                 onChange={(e) => handleChange("ong_name", e.target.value)}
                 error={error}
               />
@@ -120,6 +120,7 @@ export const RegisterOng = () => {
                 type="email"
                 placeholder="ong@mail.com"
                 fullWidth={true}
+                value={formData.email}
                 onChange={(e) => handleChange("email", e.target.value)}
                 error={error}
               />
@@ -128,6 +129,7 @@ export const RegisterOng = () => {
                 type="text"
                 placeholder="@ong"
                 fullWidth={true}
+                value={formData.username}
                 onChange={(e) => handleChange("username", e.target.value)}
                 error={error}
               />
@@ -136,6 +138,7 @@ export const RegisterOng = () => {
                 label="Descrição da ONG" 
                 fullWidth={true} 
                 placeholder="Descreva sobre o que é a ONG..."
+                value={formData.ong_description}
                 onChange={(e) => handleChange("ong_description", e.target.value)}
                 error={error}  
               />
@@ -185,25 +188,29 @@ export const RegisterOng = () => {
               </div>
                 <Input 
                   label="Rua" 
-                  fullWidth={true} 
+                  fullWidth={true}
+                  value={formData.address}
                   onChange={(e) => handleChange("address", e.target.value)}
                   error={error}/>
                 <Input 
                   label="CEP" 
                   placeholder="XXXXX-XXX" 
-                  fullWidth={true} 
+                  fullWidth={true}
+                  value={formData.postal_code}
                   onChange={(e) => handleChange("postal_code", e.target.value)}
                   error={error} />
               <div className="flex gap-2 w-full">
                 <Input 
                   label="Cidade" 
-                  fullWidth={true} 
+                  fullWidth={true}
+                  value={formData.city}
                   onChange={(e) => handleChange("city", e.target.value)}
                   error={error}/>
                 <Input 
                   label="Estado" 
                   placeholder="SP" 
                   fullWidth={true}
+                  value={formData.state}
                   onChange={(e) => handleChange("state", e.target.value)}
                   error={error} />
               </div>
@@ -244,12 +251,14 @@ export const RegisterOng = () => {
             <div className="flex gap-5 flex-col w-full">
               <Input 
                 label="Nome" 
-                fullWidth={true} 
+                fullWidth={true}
+                value={formData.first_name}
                 onChange={(e) => handleChange("first_name", e.target.value)}
                 error={error}/>
               <Input 
                 label="Sobrenome" 
                 fullWidth={true}
+                value={formData.last_name}
                 onChange={(e) => handleChange("last_name", e.target.value)}
                 error={error}/>
               
@@ -283,13 +292,15 @@ export const RegisterOng = () => {
               <Input 
                 label="Senha" 
                 type="password" 
-                fullWidth={true} 
+                fullWidth={true}
+                value={formData.password}
                 onChange={(e) => handleChange("password", e.target.value)}
                 error={error}/>
               <Input 
                 label="Confirmar Senha" 
                 type="password" 
-                fullWidth={true} 
+                fullWidth={true}
+                value={formData.password2}
                 onChange={(e) => handleChange("password2", e.target.value)}
                 error={error}/>
 
