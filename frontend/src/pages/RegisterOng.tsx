@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { Select } from "@/components/Select";
 
 import Logo from "@/static/assets/logo.svg";
 
@@ -12,12 +13,14 @@ import { useNavigate } from "react-router-dom";
 import { createOng } from "@/api/userApi";
 import { OngTypes } from "@/types/userTypes";
 import { setCookie } from "@/utils/cookies";
-import { formatCEP, formatState, removeCEPMask } from "@/utils/masks";
+import { formatCEP, removeCEPMask } from "@/utils/masks";
+import { getStates, getCitiesByState, City } from "@/data/statesAndCities";
 
 export const RegisterOng = () => {
   const [step, setStep] = useState(1); // Estado para controlar o passo do formulário
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [availableCities, setAvailableCities] = useState<City[]>([]);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<OngTypes>({
@@ -42,8 +45,19 @@ export const RegisterOng = () => {
     // Aplica máscaras específicas
     if (field === 'postal_code') {
       formattedValue = formatCEP(value);
-    } else if (field === 'state') {
-      formattedValue = formatState(value);
+    }
+    
+    // Se o estado mudou, atualiza as cidades disponíveis
+    if (field === 'state') {
+      const cities = getCitiesByState(value);
+      setAvailableCities(cities);
+      // Limpa a cidade selecionada quando o estado muda
+      setFormData((prev) => ({
+        ...prev,
+        state: formattedValue,
+        city: '',
+      }));
+      return;
     }
     
     setFormData((prev) => ({
@@ -51,6 +65,17 @@ export const RegisterOng = () => {
       [field]: formattedValue,
     }));
   };
+
+  // Opções para os selects
+  const stateOptions = getStates().map(state => ({
+    value: state.abbreviation,
+    label: `${state.name} (${state.abbreviation})`
+  }));
+
+  const cityOptions = availableCities.map(city => ({
+    value: city.name,
+    label: city.name
+  }));
 
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -229,19 +254,23 @@ export const RegisterOng = () => {
                   onChange={(e) => handleChange("postal_code", e.target.value)}
                   error={error} />
               <div className="flex gap-2 w-full">
-                <Input 
-                  label="Cidade" 
-                  fullWidth={true}
-                  value={formData.city}
-                  onChange={(e) => handleChange("city", e.target.value)}
-                  error={error}/>
-                <Input 
-                  label="Estado" 
-                  placeholder="SP" 
+                <Select
+                  label="Estado"
+                  options={stateOptions}
                   fullWidth={true}
                   value={formData.state}
                   onChange={(e) => handleChange("state", e.target.value)}
-                  error={error} />
+                  placeholder="Selecione o estado"
+                />
+                <Select
+                  label="Cidade"
+                  options={cityOptions}
+                  fullWidth={true}
+                  value={formData.city}
+                  onChange={(e) => handleChange("city", e.target.value)}
+                  placeholder="Selecione a cidade"
+                  disabled={!formData.state}
+                />
               </div>
 
               <div className="w-full flex justify-between">

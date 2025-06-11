@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
 import { OngCardEdit } from "@/components/OngCardEdit";
 import { NavigationTab } from "@/components/NavigationTab";
 import {  useEffect, useState } from "react";
@@ -10,7 +11,8 @@ import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
 import { ItemOngTypes, OngItemsResponseTypes, OngNecessitiesResponseTypes, OngNecessitiesTypes } from "@/types/OngTypes";
 import { createNecessityOng, getNecessityOng } from "@/api/necessityOngApi";
-import { formatCEP, formatState } from "@/utils/masks";
+import { formatCEP } from "@/utils/masks";
+import { getStates, getCitiesByState, City } from "@/data/statesAndCities";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -28,6 +30,7 @@ export const UpdateOng = () => {
   const [phone, setPhone] = useState("");
   const [website, setWebSite] = useState("");
   const [activeTab, setActiveTab] = useState("Informações");
+  const [availableCities, setAvailableCities] = useState<City[]>([]);
   const [itemData, setItemData] = useState<ItemOngTypes>({
     name: "",
     category: "",
@@ -45,6 +48,24 @@ export const UpdateOng = () => {
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
+
+  const handleStateChange = (newState: string) => {
+    setState(newState);
+    const cities = getCitiesByState(newState);
+    setAvailableCities(cities);
+    setCity(''); // Limpa a cidade quando o estado muda
+  };
+
+  // Opções para os selects
+  const stateOptions = getStates().map(state => ({
+    value: state.abbreviation,
+    label: `${state.name} (${state.abbreviation})`
+  }));
+
+  const cityOptions = availableCities.map(city => ({
+    value: city.name,
+    label: city.name
+  }));
 
   const fetchItems = async () => {
     const items = await getItemsOng();
@@ -184,21 +205,22 @@ export const UpdateOng = () => {
                       type="text"
                     />
                     <div className="flex flex-col sm:flex-row w-full gap-4">
-                      <Input
+                      <Select
+                        label="Estado"
+                        options={stateOptions}
+                        value={state}
+                        onChange={(e) => handleStateChange(e.target.value)}
+                        placeholder="Selecione o estado"
+                        fullWidth
+                      />
+                      <Select
                         label="Cidade"
-                        placeholder="São Paulo"
+                        options={cityOptions}
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        type="text"
-                        isFlex1
-                      />
-                      <Input
-                        label="Estado"
-                        placeholder="SP"
-                        value={state}
-                        onChange={(e) => setState(formatState(e.target.value))}
-                        type="text"
-                        isFlex1
+                        placeholder="Selecione a cidade"
+                        fullWidth
+                        disabled={!state}
                       />
                     </div>
                   </div>
