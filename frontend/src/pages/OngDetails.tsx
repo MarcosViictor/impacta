@@ -142,26 +142,29 @@ export const OngDetails = () => {
     return (
         <>
             <Header /> 
-            <div className="h-[200px] bg-gray-300 mb-8"></div>
-            <section className="container mx-auto px-4 flex gap-8 justify-center mb-8">
+            <section className="container mt-15 mx-auto px-4 flex gap-8 justify-center mb-8">
                 <div className="w-[50%]">
                     <h2 className="text-2xl font-bold mb-2">{ong.name}</h2>
                     
-                    <div className="mb-6 flex gap-4 items-center text-gray-500 text-sm">
-                        <span className="flex items-center gap-1">
-                            <MapPin className="w-5 h-5" />
-                            <span>{ong.user.city}, {ong.user.state}</span>
-                        </span>
-                        <span className="flex items-center gap-1">
-                            <StarIcon className="w-5 h-5" />
-                            <span>{ong.avarage_rating > 0 ? ong.avarage_rating : 'Nenhuma avaliação'}</span>
-                        </span>
+                    <div className="mb-6 flex flex-col gap-2 text-gray-500 text-sm">
+                        <div className="flex gap-4 items-center text-gray-500 text-sm">
+                            <span className="flex items-center gap-1">
+                                <MapPin className="w-5 h-5" />
+                                <span>{ong.user.city}, {ong.user.state}</span>
+                            </span>
+                            <span className="flex items-center gap-1">
+                                <StarIcon className="w-5 h-5" />
+                                <span>{ong.avarage_rating > 0 ? ong.avarage_rating : 'Nenhuma avaliação'}</span>
+                            </span>
+                        </div>
+
+                            <p className="text-[1.5rem] ">{ong.description}</p>
                     </div>
 
                     <NavigationTab
                         activeTab={activeTab}
                         handleTabClick={handleTabClick}
-                        content={['Sobre', 'Necessidades', 'FAQ', 'Galeria', 'Avaliações']}
+                        content={['Necessidades', 'FAQ']}
                     />
 
                     {renderTabContent()}
@@ -178,7 +181,13 @@ export const OngDetails = () => {
                 </div>
             </section>
 
-            <Maps />
+            <Maps 
+                address={ong.user.address}
+                city={ong.user.city}
+                state={ong.user.state}
+                postalCode={ong.user.postal_code}
+                ongName={ong.name}
+            />
         </>
     )
 }
