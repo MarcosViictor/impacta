@@ -1,10 +1,15 @@
-from django.http import HttpResponse
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-def Olaturma(request):
-    return HttpResponse("Olá turma!")
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ola/', Olaturma)
+    path('api/', include('api.urls')),
+    path('api/auth/', include('users.urls')),
+    path('api/users/', include('users.urls')),
 ]
+
+# Servir as midias do projeto.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

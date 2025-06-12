@@ -3,13 +3,14 @@ import { Button } from "./Button"
 import { Link } from "react-router-dom"
 
 interface OngCardProps {
+    id: number
     name: string
-    description: string
-    city: string
-    state: string
+    description?: string
+    city?: string
+    state?: string
 }
 
-export const OngCard = ( {name, description, city, state } : OngCardProps) => {
+export const OngCard = ( {id, name, description, city, state  } : OngCardProps) => {
     return (
         <>
             <div className="w-[400px]">
@@ -35,7 +36,7 @@ export const OngCard = ( {name, description, city, state } : OngCardProps) => {
                             variant="light"
                             size="sm"
                             as={Link}
-                            to="/ong"
+                            to={`/ong/${id}`}
                             
                         >
                             Ver detalhes

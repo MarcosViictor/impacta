@@ -24,6 +24,7 @@ export const FAQPage = () => {
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+  
 
   return (
     <>

@@ -1,12 +1,18 @@
 import { Header } from "@/components/Header";
 import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
 import { OngCardEdit } from "@/components/OngCardEdit";
 import { NavigationTab } from "@/components/NavigationTab";
-import { useState } from "react";
+import {  useEffect, useState } from "react";
+import { createItemOng, getItemsOng } from "@/api/createItemOng";
 
 import { StarIcon, MapPin, Plus, Upload } from 'lucide-react'
 import FAQ from "@/components/FAQ";
 import { Button } from "@/components/Button";
+import { ItemOngTypes, OngItemsResponseTypes, OngNecessitiesResponseTypes, OngNecessitiesTypes } from "@/types/OngTypes";
+import { createNecessityOng, getNecessityOng } from "@/api/necessityOngApi";
+import { formatCEP } from "@/utils/masks";
+import { getStates, getCitiesByState, City } from "@/data/statesAndCities";
 
 export const UpdateOng = () => {
   const [name, setName] = useState("");
@@ -24,10 +30,87 @@ export const UpdateOng = () => {
   const [phone, setPhone] = useState("");
   const [website, setWebSite] = useState("");
   const [activeTab, setActiveTab] = useState("Informações");
+  const [availableCities, setAvailableCities] = useState<City[]>([]);
+  const [itemData, setItemData] = useState<ItemOngTypes>({
+    name: "",
+    category: "",
+    quantity: 0,
+  });
+  const [necessityData, setNecessityData] = useState<OngNecessitiesTypes>({
+    item: 0,
+    quantity: 0,
+    urgency: "baixa" as "baixa" | "media" | "alta",
+    status: "pendente",
+  });
+  const [necessity, setNecessity] = useState<OngNecessitiesResponseTypes[]>([]);
+  const [items, setItems] = useState<OngItemsResponseTypes[]>([]);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
+
+  const handleStateChange = (newState: string) => {
+    setState(newState);
+    const cities = getCitiesByState(newState);
+    setAvailableCities(cities);
+    setCity(''); // Limpa a cidade quando o estado muda
+  };
+
+  // Opções para os selects
+  const stateOptions = getStates().map(state => ({
+    value: state.abbreviation,
+    label: `${state.name} (${state.abbreviation})`
+  }));
+
+  const cityOptions = availableCities.map(city => ({
+    value: city.name,
+    label: city.name
+  }));
+
+  const fetchItems = async () => {
+    const items = await getItemsOng();
+    setItems(items);
+    console.log("Fetched items:", items);
+  }
+
+  const fetchNecessities = async () => {
+    try {
+      const necessities = await getNecessityOng();
+      console.log("Fetched necessities:", necessities);
+      setNecessity(necessities);
+    } catch (error) {
+      console.error("Error fetching necessities:", error);
+    }
+  }
+
+  const handleCreateItem = async () => {
+    try {
+      const response = await createItemOng(itemData);
+      console.log("Item created successfully:", response);
+      setItemData({ name: "", category: "", quantity: 0 }); // Reset item data after creation
+      fetchItems();
+    } catch (error) {
+      console.error("Error creating item:", error);
+    }
+  };
+
+  const handleCreateNecessity = async () => {
+    try {
+      const response = await createNecessityOng(necessityData);
+      console.log("Necessity created successfully:", response);
+      setNecessityData({ item: 0, quantity: 0, urgency: "baixa", status: "pendente" }); // Reset necessity data after creation
+      fetchNecessities()
+    } catch (error) {
+      console.error("Error creating necessity:", error);
+    }
+  };
+
+  useEffect(() => {
+  
+        
+      fetchItems();
+      fetchNecessities();
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -95,7 +178,7 @@ export const UpdateOng = () => {
                         label="CEP"
                         placeholder="01234-567"
                         value={cep}
-                        onChange={(e) => setCep(e.target.value)}
+                        onChange={(e) => setCep(formatCEP(e.target.value))}
                         type="text"
                       />
                       <Input
@@ -122,21 +205,22 @@ export const UpdateOng = () => {
                       type="text"
                     />
                     <div className="flex flex-col sm:flex-row w-full gap-4">
-                      <Input
+                      <Select
+                        label="Estado"
+                        options={stateOptions}
+                        value={state}
+                        onChange={(e) => handleStateChange(e.target.value)}
+                        placeholder="Selecione o estado"
+                        fullWidth
+                      />
+                      <Select
                         label="Cidade"
-                        placeholder="São Paulo"
+                        options={cityOptions}
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        type="text"
-                        isFlex1
-                      />
-                      <Input
-                        label="Estado"
-                        placeholder="SP"
-                        value={state}
-                        onChange={(e) => setState(e.target.value)}
-                        type="text"
-                        isFlex1
+                        placeholder="Selecione a cidade"
+                        fullWidth
+                        disabled={!state}
                       />
                     </div>
                   </div>
@@ -188,18 +272,76 @@ export const UpdateOng = () => {
         );
       case "Necessidades":
         return (
-          <div className="flex justify-center items-center w-full flex-col gap-4">
-            <div className="grid grid-cols-4 gap-6.5">
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
-              <OngCardEdit />
+          <div className="flex justify-center  w-full flex-col gap-4">
+            <div className="w-full">
+              <h2 className="text-[1.3rem] pb-2 text-start">Itens</h2>
+              <div className="grid grid-cols-4 gap-6.5">
+                {items.map((item) => (
+                  <OngCardEdit
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    quantity={item.quantity.toString()}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="w-full">
+              <h2 className="text-[1.3rem] pb-2 text-start">Necessidades</h2>
+              <div className="grid grid-cols-4 gap-6.5">
+                {necessity.map((item) => (
+                  <OngCardEdit
+                    key={item.id}
+                    id={item.id}
+                    name={item.item_name || ''}
+                    quantity={(item.quantity || 0).toString()}
+                    priority={
+                      item.urgency === "baixa" ? "Baixa" :
+                      item.urgency === "media" ? "Média" :
+                      item.urgency === "alta" ? "Alta" : "Baixa"
+                    }
+                  />
+                ))}
+              </div>
             </div>
 
+            <div className="border border-gray-300 rounded-md p-4 w-full">
+              <h3 className="text-[1.3rem] font-bold mb-1">
+                Adicionar novo item
+              </h3>
+
+              <div className="flex gap-3 w-full justify-between">
+                  <Input 
+                      label="Nome do Item"
+                      isFlex1={true}
+                      type="text"
+                      value={itemData.name}
+                      onChange={(e) => setItemData({ ...itemData, name: e.target.value })}
+                                            
+                  />
+                  <Input 
+                      label="Categoria"
+                      type="text"
+                      isFlex1={true}
+                      value={itemData.category}
+                      onChange={(e) => setItemData({ ...itemData, category: e.target.value })}
+
+                  />
+                  <Input 
+                      label="Quantidade"
+                      type="number"
+                      value={itemData.quantity.toString()}
+                      onChange={(e) => setItemData({ ...itemData, quantity: Number(e.target.value) })}
+                  />
+
+              </div>
+
+              <div className="mt-4">
+                <Button size="sm" icon={<Plus />} type="submit" onClick={handleCreateItem}>
+                  Adicionar
+                </Button>
+              </div>
+            </div>
             <div className="border border-gray-300 rounded-md p-4 w-full">
               <h3 className="text-[1.3rem] font-bold mb-1">
                 Adicionar nova necessidade
@@ -207,20 +349,37 @@ export const UpdateOng = () => {
 
               <div className="flex gap-3 w-full justify-between">
                   <Input 
-                      label="Nome do Item"
+                      label="ID do Item"
                       isFlex1={true}
+                      type="number"
+                      value={necessityData.item.toString()}
+                      onChange={(e) => setNecessityData({ ...necessityData, item: Number(e.target.value) })}
+
                   />
                   <Input 
                       label="Quantidade"
+                      type="number"
+                      isFlex1={true}
+                      value={necessityData.quantity.toString()}
+                      onChange={(e) => setNecessityData({ ...necessityData, quantity: Number(e.target.value) })}
                   />
-                  <Input 
-                      label="Prioridade"
-                  />
+                  <div className="flex flex-col w-1/6">
+                    <label>Prioridade</label>
+                    <select
+                        className="border border-gray-300 rounded-md p-2 mt-1"
+                        onChange={(e) => setNecessityData({ ...necessityData, urgency: e.target.value as "baixa" | "media" | "alta" })}
+                        value={necessityData.urgency}
+                    >
+                      <option value="baixa">Baixa</option>
+                      <option value="media">Média</option>
+                      <option value="alta">Alta</option>
+                    </select>
+                  </div>
 
               </div>
 
               <div className="mt-4">
-                <Button size="sm" icon={<Plus />}>
+                <Button size="sm" icon={<Plus />} type="submit" onClick={handleCreateNecessity}>
                   Adicionar
                 </Button>
               </div>

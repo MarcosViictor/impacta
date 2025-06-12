@@ -4,11 +4,37 @@ import { useState } from 'react'
 import { ContactOng } from '@/types/ContactOng'
 
 import { DonationModal } from './DonationModal'
+import { DonationType } from '@/types/Donation'
+import { createDonation } from '@/api/donationApi'
+import { getCookie } from '@/utils/cookies'
+import { useParams } from 'react-router-dom'
 
 type CardInformationsProps = ContactOng
 
 export const CardInformations = (props: CardInformationsProps) => {
   const [showDonationModal, setShowDonationModal] = useState(false)
+  const userIdCookie = getCookie('user_id');
+  const userId = userIdCookie ? parseInt(userIdCookie, 10) : 0;
+  const ongId = useParams<{ id: string }>().id;
+  const [donationData, setDonationData] = useState<DonationType>({
+          org: ongId ? parseInt(ongId, 10) : 0, // Convert ongId to number
+          item_id: 0,
+          donor: userId,
+          quantity: 0,
+          status: 'pendente'
+    })
+
+
+  const handleCreateDonation = async () => {
+          try {
+              const response = await createDonation(donationData);
+              console.log('Doação criada com sucesso:', response);
+              setShowDonationModal(false); 
+          }
+          catch (error) {
+              console.error('Erro ao buscar necessidades da ONG:', error);
+          }
+      }
 
   return (
     <>
@@ -53,7 +79,12 @@ export const CardInformations = (props: CardInformationsProps) => {
 
       {/* Modal */}
       {showDonationModal && (
-        <DonationModal onClose={() => setShowDonationModal(false)} />
+        <DonationModal 
+          onClose={() => setShowDonationModal(false)} 
+          onCreateDonation={handleCreateDonation}
+          donationData={donationData}
+          setDonationData={setDonationData}
+        />
       )}
     </>
   )

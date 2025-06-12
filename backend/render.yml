@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: impacta-backend
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: backend/Dockerfile
+    buildCommand: ""
+    startCommand: gunicorn backend.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: backend.settings
+      - key: PYTHONUNBUFFERED
+        value: 1
