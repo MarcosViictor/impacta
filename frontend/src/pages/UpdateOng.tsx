@@ -421,10 +421,8 @@ export const UpdateOng = () => {
     <>
       <Header />
 
-      <div className="h-[200px] bg-gray-300 mb-8 w-full"></div>
-
       <main className="flex flex-col items-center px-4 sm:px-6 lg:px-8 w-full pb-10">
-        <div className="w-full max-w-7xl">
+        <div className="w-full max-w-7xl mt-10">
           <div className="flex flex-col mb-6">
             <h2 className="text-2xl font-bold mb-2">Alimentação</h2>
             <div className="flex flex-col sm:flex-row gap-4 items-center text-gray-500 text-sm">
@@ -442,7 +440,7 @@ export const UpdateOng = () => {
           <div className="mb-8 w-full">
             <NavigationTab
               activeTab={activeTab}
-              content={["Informações", "Necessidades", "FAQ", "Galeria"]}
+              content={["Necessidades", "FAQ"]}
               handleTabClick={handleTabClick}
             />
           </div>

@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 
 import { createOng } from "@/api/userApi";
 import { OngTypes } from "@/types/userTypes";
-import { setCookie } from "@/utils/cookies";
 import { formatCEP, removeCEPMask } from "@/utils/masks";
 import { getStates, getCitiesByState, City } from "@/data/statesAndCities";
 
@@ -127,7 +126,6 @@ export const RegisterOng = () => {
       
       const response = await createOng(dataToSend);
       console.log("ONG cadastrada:", response);
-      setCookie('user_type', response.user_type)
       
       // Aguarda um pouco para mostrar o loading
       setTimeout(() => {

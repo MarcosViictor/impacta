@@ -11,7 +11,6 @@ import { FormEvent, useState } from "react";
 import Logo from "@/static/assets/logo.svg";
 import { User } from "@/types/userTypes";
 import { createUser } from "@/api/userApi";
-import { setCookie } from "@/utils/cookies";
 
 export const Register = () => {
   const [activeTab, setActiveTab] = useState("Doador");
@@ -81,12 +80,11 @@ export const Register = () => {
     try {
       const response = await createUser(formData);
       console.log('Usuário criado:', response);
-      setCookie('user_type', response.user_type)
       
       // Aguarda um pouco para mostrar o loading
       setTimeout(() => {
         setIsLoading(false);
-        navigate('/search');
+        navigate('/login'); // Redireciona para login em vez de search
       }, 2000);
     } catch (error: any) {
       console.error('Erro no cadastro:', error);

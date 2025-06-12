@@ -21,3 +21,11 @@ export interface OngTypes extends User {
     ong_name: string;
     ong_description: string;
 }
+
+export interface DecodedJWT {
+    user_id: number;
+    user_type: string;
+    exp: number;
+    iat: number;
+    jti: string;
+}

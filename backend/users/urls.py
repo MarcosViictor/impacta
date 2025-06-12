@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
 from users.views.userStatusView import UserStatusView
 from users.views.userProfileView import UserProfileView, ChangePasswordView
 from users.views.ongView import OngDetailView, OngListView  
-from users.views import CustomTokenObtainPairView
+from users.views.customTokenView import CustomTokenObtainPairView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),

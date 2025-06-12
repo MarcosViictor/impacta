@@ -1,4 +1,4 @@
-import { OngTypes, UserLogin, User } from '@/types/userTypes';
+import { OngTypes, UserLogin, User, DecodedJWT } from '@/types/userTypes';
 import { setCookie } from '@/utils/cookies';
 import { api } from '@/utils/api';
 import { jwtDecode } from 'jwt-decode';
@@ -26,8 +26,11 @@ export const Login = async (
       setCookie('refresh_token', data.refresh);
       
       // Decodifica o token JWT para obter as informações do usuário
-      const decodedToken = jwtDecode(data.access) as { user_id: number };
+      const decodedToken = jwtDecode(data.access) as DecodedJWT;
       setCookie('user_id', decodedToken.user_id.toString());
+      
+      // Adiciona o user_type ao data de retorno para manter compatibilidade
+      data.user_type = decodedToken.user_type;
     }
 
     return data;

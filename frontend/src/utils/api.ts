@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getCookie } from "./cookies";
 
-const API_URL = "https://impacta-deploy.onrender.com/api";
-// const API_URL = "http://localhost:8000/api";
+// const API_URL = "https://impacta-deploy.onrender.com/api";
+const API_URL = "http://localhost:8000/api";
 
 export const api = axios.create({
   baseURL: API_URL,

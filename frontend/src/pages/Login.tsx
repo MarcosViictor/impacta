@@ -8,7 +8,7 @@ import Logo from "@/static/assets/logo.svg";
 import { Login as LoginApi } from "@/api/userApi";
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { setCookie } from "@/utils/cookies";
+import { getUserType } from "@/utils/auth";
 
 export const Login = () => {
   const [error, setError] = useState("");
@@ -41,25 +41,21 @@ export const Login = () => {
       const data = await LoginApi(formData);
       if (data && data.access) {
         console.log("Login bem sucedido", data);
-        console.log("Dados do usuário:", data.user_type);
+        
+        // Usa a função para obter o user_type do token JWT decodificado
+        const userType = getUserType();
+        console.log("Tipo de usuário do token:", userType);
 
+        // Aguarda um pouco para mostrar o loading
+        setTimeout(() => {
+          setIsLoading(false);
+          if(userType === 'ONG') {
+            window.location.href = "/dashboard";
+          } else if (userType === 'DONOR') {
+            window.location.href = "/search";
+          }
+        }, 2000);
       }
-      // Set the cookie
-      setCookie("user_type", data.user_type);
-      
-      // Use the user type from the API response
-      const userType = data.user_type;
-
-      // Aguarda um pouco para mostrar o loading
-      setTimeout(() => {
-        setIsLoading(false);
-        if(userType === 'ONG') {
-          window.location.href = "/dashboard";
-        } else if (userType === 'DONOR') {
-          window.location.href = "/search";
-        }
-      }, 2000);
-
     } catch (error: any) {
       console.error("Erro no login:", error);
       setIsLoading(false);
