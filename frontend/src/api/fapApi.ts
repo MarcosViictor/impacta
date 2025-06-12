@@ -4,7 +4,7 @@ import { getCookie } from "@/utils/cookies";
 
 
 
-export const createFaq = async ({org_user, question, answer} : FaqTypes) => {
+export const createFaq = async ({question, answer} : FaqTypes) => {
     const getOngId = getCookie("ongId");
 
     try {

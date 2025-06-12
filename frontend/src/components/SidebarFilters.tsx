@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Button } from "@/components/Button"
 
-export const SidebarFilters = ({ onApplyFilters }) => {
+export const SidebarFilters = ({ onApplyFilters }: any) => {
   const [selectedState, setSelectedState] = useState("todos")
 
   const handleApplyFilters = () => {
