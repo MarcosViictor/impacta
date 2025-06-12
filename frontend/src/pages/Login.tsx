@@ -8,8 +8,7 @@ import Logo from "@/static/assets/logo.svg";
 import { Login as LoginApi } from "@/api/userApi";
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { getUserType } from "@/utils/auth";
-import { getCookie, setCookie } from "@/utils/cookies";
+import { setCookie } from "@/utils/cookies";
 
 export const Login = () => {
   const [error, setError] = useState("");

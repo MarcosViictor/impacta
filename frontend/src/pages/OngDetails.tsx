@@ -8,16 +8,13 @@ import { Maps } from "@/components/Maps"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { getOngById } from "@/api/listOngsApi"
-import { OngNecessitiesResponseTypes, OngTypes } from "@/types/OngTypes"
+import { OngTypes } from "@/types/OngTypes"
 
 import { StarIcon, MapPin } from 'lucide-react'
 import { NavigationTab } from "@/components/NavigationTab"
 import { CardFAQ } from "@/components/CardFAQ"
 import { getFaqs } from "@/api/fapApi"
 import { FaqTypes } from "@/types/FaqTypes"
-import { getNecessityOng } from "@/api/necessityOngApi"
-import { createDonation } from "@/api/donationApi"
-import { DonationType } from "@/types/Donation"
 
 type NecessityType = {
   id: number;
@@ -43,7 +40,16 @@ export const OngDetails = () => {
             try {
                 const data = await getOngById(id)
                 setOng(data)
-                setNecessities(data.necessities)
+                // Map the necessities to the correct type structure
+                if (data.necessities && Array.isArray(data.necessities)) {
+                    const formattedNecessities = data.necessities.map((item: any) => ({
+                        id: item.id || 0,
+                        item_name: item.item_name || '',
+                        quantity: item.quantity || 0,
+                        urgency: (item.urgency as 'Alta' | 'Média' | 'Baixa') || 'Média'
+                    }));
+                    setNecessities(formattedNecessities);
+                }
                 console.log('ONG details fetched:', data);
             } catch (error) {
                 console.error('Erro ao buscar ONG:', error)

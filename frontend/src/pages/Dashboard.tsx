@@ -5,8 +5,9 @@ import { DonationDetailsModal } from '@/components/DonationDetailModal'
 
 import { Eye } from 'lucide-react'
 
-import { Donation } from '@/types/Donation'
+// import { Donation } from '@/types/Donation'
 import { donationsData } from '@/data/Donations'
+import { Donation } from '@/types/Donation'
 
 const ITEMS_PER_PAGE = 5
 

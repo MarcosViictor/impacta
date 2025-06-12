@@ -14,9 +14,8 @@ interface DonationModalProps {
   setDonationData?: (data: DonationType) => void
 }
 
-//fazer doação amanhã
 
-export const DonationModal = ({ onClose, onCreateDonation, quantity, donationData, setDonationData }: DonationModalProps) => {
+export const DonationModal = ({ onClose, }: DonationModalProps) => {
   const [activeTab, setActiveTab] = useState("Doar itens")
 
   const renderTabContent = () => {

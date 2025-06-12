@@ -17,15 +17,7 @@ const FAQ = () => {
     fetchFaqs();
   }, []);
 
-  const handleEdit = (id: string) => {
-    console.log("Edit item with id:", id);
-    // Implement edit logic here
-  };
-
-  const handleDelete = (id: string) => {
-    console.log("Delete item with id:", id);
-    // Implement delete logic here
-  };
+ 
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
