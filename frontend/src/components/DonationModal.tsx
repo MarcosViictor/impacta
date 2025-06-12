@@ -4,12 +4,19 @@ import { NavigationTab } from "./NavigationTab"
 
 import { useState } from "react"
 import { X } from "lucide-react"
+import { DonationType } from "@/types/Donation"
 
 interface DonationModalProps {
   onClose: () => void
+  onCreateDonation?: (donation: DonationType) => void
+  quantity?: number
+  donationData?: DonationType
+  setDonationData?: (data: DonationType) => void
 }
 
-export const DonationModal = ({ onClose }: DonationModalProps) => {
+//fazer doação amanhã
+
+export const DonationModal = ({ onClose, onCreateDonation, quantity, donationData, setDonationData }: DonationModalProps) => {
   const [activeTab, setActiveTab] = useState("Doar itens")
 
   const renderTabContent = () => {
@@ -21,20 +28,12 @@ export const DonationModal = ({ onClose }: DonationModalProps) => {
               <Input placeholder="Nome do item" label="Item" isFlex1 />
               <Input placeholder="Ex.: 1" label="Quantidade" />
             </div>
-            <div>
-              <ul className="list-disc list-inside text-sm text-gray-700 pl-2">
-                <li>Pão x10</li>
-                <li>Pacote de arroz x50</li>
-              </ul>
-            </div>
-            <Button variant="light" size="sm" className="mb-4">
-              Adicionar Item
-            </Button>
+
             <Input
               placeholder="Deixe uma mensagem para ONG"
               label="Mensagem (Opcional)"
             />
-            <Button>Doar</Button>
+            <Button type="submit" >Doar</Button>
           </div>
         )
       case "Doar valor":

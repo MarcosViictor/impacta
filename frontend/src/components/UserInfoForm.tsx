@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Input } from "./Input"
 import { Button } from "./Button"
+import { Select } from "./Select"
+import { getStates, getCitiesByState, City } from "@/data/statesAndCities"
 
 interface UserInfo {
   nome: string
@@ -10,6 +12,7 @@ interface UserInfo {
 }
 
 export const UserInfoForm = () => {
+  const [availableCities, setAvailableCities] = useState<City[]>([]);
   const [formData, setFormData] = useState<UserInfo>({
     nome: "",
     sobre: "",
@@ -17,8 +20,20 @@ export const UserInfoForm = () => {
     estado: ""
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+  const handleChange = (name: string, value: string) => {
+    // Se o estado mudou, atualiza as cidades disponíveis
+    if (name === 'estado') {
+      const cities = getCitiesByState(value);
+      setAvailableCities(cities);
+      // Limpa a cidade selecionada quando o estado muda
+      setFormData(prev => ({
+        ...prev,
+        estado: value,
+        cidade: '',
+      }));
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -30,6 +45,17 @@ export const UserInfoForm = () => {
     // Aqui você pode enviar os dados para uma API ou outra lógica de persistência
   }
 
+  // Opções para os selects
+  const stateOptions = getStates().map(state => ({
+    value: state.abbreviation,
+    label: `${state.name} (${state.abbreviation})`
+  }));
+
+  const cityOptions = availableCities.map(city => ({
+    value: city.name,
+    label: city.name
+  }));
+
   return (
     <div className=" rounded-lg w-full  space-y-4">
       <h2 className="text-xl font-bold mb-2">Informações do Usuário</h2>
@@ -39,7 +65,7 @@ export const UserInfoForm = () => {
         name="nome"
         placeholder="Digite seu nome"
         value={formData.nome}
-        onChange={handleChange}
+        onChange={(e) => handleChange("nome", e.target.value)}
       />
 
       <Input
@@ -47,26 +73,27 @@ export const UserInfoForm = () => {
         name="sobre"
         placeholder="Fale um pouco sobre você"
         value={formData.sobre}
-        onChange={handleChange}
+        onChange={(e) => handleChange("sobre", e.target.value)}
       />
 
       <div className="flex gap-3">
-        <Input
-          label="Cidade"
-          name="cidade"
-          placeholder="Cidade"
-          value={formData.cidade}
-          onChange={handleChange}
-          isFlex1
+        <Select
+          label="Estado"
+          options={stateOptions}
+          value={formData.estado}
+          onChange={(e) => handleChange("estado", e.target.value)}
+          placeholder="Selecione o estado"
           fullWidth
         />
 
-        <Input
-          label="Estado"
-          name="estado"
-          placeholder="Estado"
-          value={formData.estado}
-          onChange={handleChange}
+        <Select
+          label="Cidade"
+          options={cityOptions}
+          value={formData.cidade}
+          onChange={(e) => handleChange("cidade", e.target.value)}
+          placeholder="Selecione a cidade"
+          fullWidth
+          disabled={!formData.estado}
         />
       </div>
 

@@ -1,36 +1,85 @@
 import { CardInformations } from "@/components/CardInformations"
-import { CardNumbers } from "@/components/CardNumbers"
+// import { CardNumbers } from "@/components/CardNumbers"
 import { Header } from "@/components/Header"
 import { Itens } from "@/components/Itens"
 import Review from '@/pages/Review'
 import { Maps } from "@/components/Maps"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { getOngById } from "@/api/listOngsApi"
+import { OngNecessitiesResponseTypes, OngTypes } from "@/types/OngTypes"
 
 import { StarIcon, MapPin } from 'lucide-react'
 import { NavigationTab } from "@/components/NavigationTab"
 import { CardFAQ } from "@/components/CardFAQ"
+import { getFaqs } from "@/api/fapApi"
+import { FaqTypes } from "@/types/FaqTypes"
+import { getNecessityOng } from "@/api/necessityOngApi"
+import { createDonation } from "@/api/donationApi"
+import { DonationType } from "@/types/Donation"
+
+type NecessityType = {
+  id: number;
+  item_name: string;
+  quantity: number;
+  urgency: 'Alta' | 'Média' | 'Baixa';
+}
+
 
 export const OngDetails = () => {
+    const { id } = useParams<{ id: string }>();
     const [activeTab, setActiveTab] = useState('Sobre')
+    const [ong, setOng] = useState<OngTypes | null>(null)
+    const [faq, setFaq] = useState<FaqTypes[]>([])
+    const [loading, setLoading] = useState(true)
+    const [necessities, setNecessities] = useState<NecessityType[]>([])
+    
+
+
+    useEffect(() => {
+        const fetchOngDetails = async () => {
+            if (!id) return;
+            try {
+                const data = await getOngById(id)
+                setOng(data)
+                setNecessities(data.necessities)
+                console.log('ONG details fetched:', data);
+            } catch (error) {
+                console.error('Erro ao buscar ONG:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        const fetchFaqs = async () => {
+            try {
+                const faqs = await getFaqs();
+                setFaq(faqs);
+            } catch (error) {
+                console.error('Erro ao buscar FAQs:', error)
+            }
+        }
+
+        
+        fetchFaqs();
+        fetchOngDetails()
+    }, [id])
+
+    if (loading) return <div>Carregando...</div>
+    if (!ong) return <div>ONG não encontrada</div>
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab)
     }
+
 
     const renderTabContent = () => {
         switch (activeTab) {
             case 'Sobre':
                 return (
                     <div className="space-y-6">
-                        <p className="text-gray-700 leading-relaxed">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!
-                        </p>
-                        <div className="flex gap-2">
-                            <CardNumbers number={43} label="Comunidades Atendidas" />
-                            <CardNumbers number={32} label="Pessoas ajudadas" />
-                            <CardNumbers number={12} label="KG de Alimentos arrecadados" />
-                        </div>
+                        <p className="text-gray-700 leading-relaxed">{ong.description}</p>
                     </div>
                 )
             case 'Necessidades':
@@ -38,32 +87,28 @@ export const OngDetails = () => {
                     <div className="space-y-4">
                         <h3 className="text-xl font-semibold">Itens necessários:</h3>
                         <ul className="grid grid-cols-2 gap-2">
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
-                            <Itens />
+                            {necessities.map((necessity) => (
+                                <Itens 
+                                    key={necessity.id}
+                                    name={necessity.item_name || ''}
+                                    quantity={(necessity.quantity || 0).toString()}
+                                    priority={necessity.urgency as "Alta" | "Média" | "Baixa"}
+                                />
+                            ))}
+                            
                         </ul>
                     </div>
                 )
             case 'FAQ':
                 return (
                     <div className="space-y-4">
-                        <CardFAQ 
-                            title="exemplo"
-                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
-                        />
-                         <CardFAQ 
-                            title="exemplo"
-                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
-                        />
-                         <CardFAQ 
-                            title="exemplo"
-                            content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quam et praesentium velit voluptate voluptatem alias? Blanditiis, iure nobis dolor, quidem excepturi totam placeat earum nam commodi sed provident dignissimos!"
-                        />
+                        {faq.map((item) => (
+                            <CardFAQ 
+                                key={item.id}
+                                title={item.question}
+                                content={item.answer}
+                            />
+                        ))}
                     </div>
                 )
             case 'Galeria':
@@ -91,23 +136,19 @@ export const OngDetails = () => {
     return (
         <>
             <Header /> 
-
-            <div className="h-[200px] bg-gray-300 mb-8">
-                
-            </div>
-
+            <div className="h-[200px] bg-gray-300 mb-8"></div>
             <section className="container mx-auto px-4 flex gap-8 justify-center mb-8">
                 <div className="w-[50%]">
-                    <h2 className="text-2xl font-bold mb-2">Alimentação</h2>
+                    <h2 className="text-2xl font-bold mb-2">{ong.name}</h2>
                     
                     <div className="mb-6 flex gap-4 items-center text-gray-500 text-sm">
                         <span className="flex items-center gap-1">
                             <MapPin className="w-5 h-5" />
-                            <span>São Paulo, SP</span>
+                            <span>{ong.user.city}, {ong.user.state}</span>
                         </span>
                         <span className="flex items-center gap-1">
                             <StarIcon className="w-5 h-5" />
-                            <span>4.8 (124 avaliações)</span>
+                            <span>{ong.avarage_rating > 0 ? ong.avarage_rating : 'Nenhuma avaliação'}</span>
                         </span>
                     </div>
 
@@ -123,10 +164,10 @@ export const OngDetails = () => {
                 <div className="flex">
                     <CardInformations 
                         phone="11 99999-9999"
-                        email="contato@amigosdosanimais.org"
-                        address="Rua dos Animais, 123 - Jardim Esperança"
-                        city="São Paulo"
-                        state="SP"
+                        email={ong.user.email || ''}
+                        address={`${ong.user.address} - ${ong.user.postal_code}`}
+                        city={ong.user.city}
+                        state={ong.user.state}
                     />
                 </div>
             </section>
